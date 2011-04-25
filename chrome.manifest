@@ -1,0 +1,7 @@
+content   econtrol                 chrome/content/
+skin      econtrol   classic/1.0   chrome/skin/
+locale    econtrol   en-US         chrome/locale/en-US/
+
+
+overlay   chrome://browser/content/browser.xul   chrome://econtrol/content/ff-overlay.xul
+style chrome://global/content/customizeToolbar.xul chrome://econtrol/skin/overlay.css
