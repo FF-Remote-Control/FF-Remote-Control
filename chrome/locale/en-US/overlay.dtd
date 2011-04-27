@@ -1,8 +1,4 @@
-<!ENTITY econtrol.label "Your localized menuitem">
-<!ENTITY econtrolContext.label "Your Menuitem">
-<!ENTITY econtrolContext.accesskey "Y">
-<!ENTITY econtrolToolbarButton.label "Your Toolbar Button">
-<!ENTITY econtrolToolbarButton.tooltip "This is your toolbar button!">
-<!ENTITY econtrolSidebar.label "Your Sidebar">
-<!ENTITY econtrolToolbar.name  "example">
-<!ENTITY econtrolToolbar.label "This is an example toolbar. You can hide it under View &gt; toolbars &gt; &econtrolToolbar.name;">
+<!ENTITY remotecontrol.label "Your localized menuitem">
+<!ENTITY remotecontrolContext.label "Your Menuitem">
+<!ENTITY remotecontrolContext.accesskey "Y">
+<!ENTITY remotecontrolToolbarButton.label "Remote Control">

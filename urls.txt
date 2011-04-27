@@ -1,0 +1,41 @@
+Review Process
+https://addons.mozilla.org/en-US/developers/docs/policies/reviews
+Security best practices in extensions - MDC Doc Center
+https://developer.mozilla.org/en/Security_best_practices_in_extensions
+
+http://code.google.com/p/fbug/source/browse/branches/firebug1.8/content/firebug/commandLine.js
+
+Using nsILoginManager - MDC Doc Center
+https://developer.mozilla.org/en/XPCOM_Interface_Reference/Using_nsILoginManager
+
+Components.utils.Sandbox - MDC Doc Center
+https://developer.mozilla.org/en/Components.utils.Sandbox
+
+Components.utils.evalInSandbox - MDC Doc Center
+https://developer.mozilla.org/en/Components.utils.evalInSandbox
+
+Thread about how XMLHttpRequest gets it wrong with relative URLs - but the problem is also there with e.g. 'window.location=XXX' so how is it a bug in XMLHttpRequest?
+help with evalInSandbox - mozilla.dev.tech.xpcom | Google Groups
+http://groups.google.com/group/mozilla.dev.tech.xpcom/browse_frm/thread/1883519f1b24f91d/23fd1e82e31f84ff?lnk=gst&q=help+with+evalInSandbox#23fd1e82e31f84ff
+
+Relative URIs and Components.utils.evalInSandbox • mozillaZine Forums
+http://forums.mozillazine.org/viewtopic.php?f=19&t=1517525
+Contains a posting from Crazy-EyE. I could not get his suggestion to work
+
+Basics on how to open a listening socket in a Firefox Extension
+Using sockets (nsIServerSocket) in XPCOM component (Firefox Extension) (sockets + new window = seg faults) - Stack Overflow
+http://stackoverflow.com/questions/3176442/using-sockets-nsiserversocket-in-xpcom-component-firefox-extension-sockets
+
+Adding a toolbar icon by default
+================================
+
+Toolbar - MDC Docs
+https://developer.mozilla.org/En/Code_snippets:Toolbar#Adding_button_by_default
+
+On page load - MDC Docs
+https://developer.mozilla.org/En/Code_snippets/On_page_load#Running_code_on_an_extension%27s_first_run_or_after_an_extension%27s_update
+
+Retrieving the version of an extension as specified in the extension's install.rdf
+https://developer.mozilla.org/en/Code_snippets/Miscellaneous#Retrieving_the_version_of_an_extension_as_specified_in_the_extension%27s_install.rdf
+
+

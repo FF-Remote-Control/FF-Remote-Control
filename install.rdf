@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
-    <em:id>external-control@morch.com</em:id>
+    <em:id>remote-control@morch.com</em:id>
     <em:type>2</em:type>
-    <em:name>External Control</em:name>
+    <em:name>Remote Control</em:name>
     <em:version>0.1</em:version>
     <em:creator>Peter Valdemar Mørch</em:creator>
     <em:contributor></em:contributor>
-    <em:description>Trigger refreshinog the browser or running arbitrary javascript in the browser from outside e.g. from a script.
+    <em:description>Remote control the browser by triggering a refresh or running arbitrary javascript in one of the browser's pages from outside e.g. from a script.
 
 This allows you to refresh the browser from your IDE, or to automate tests</em:description>
-    <em:aboutURL>chrome://econtrol/content/about.xul</em:aboutURL>
-    <em:optionsURL>chrome://econtrol/content/options.xul</em:optionsURL>
+    <em:aboutURL>chrome://remotecontrol/content/about.xul</em:aboutURL>
+    <em:optionsURL>chrome://remotecontrol/content/options.xul</em:optionsURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->

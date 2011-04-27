@@ -1,22 +1,17 @@
-/* This is just an example.  You shouldn't do this. */
-#econtrol-hello
+#remotecontrol-toolbar-button
 {
-  color: red ! important;
+  list-style-image: url("chrome://remotecontrol/skin/remoteControl.png");
+  -moz-image-region: rect(0px 32px 24px 16px);
 }
-#econtrol-toolbar-button
+.active#remotecontrol-toolbar-button
 {
-  list-style-image: url("chrome://econtrol/skin/toolbar-button.png");
-  -moz-image-region: rect(0px 24px 24px 0px);
+  -moz-image-region: rect(0px 16px 24px 0px);
 }
-#econtrol-toolbar-button:hover
+[iconsize="small"] #remotecontrol-toolbar-button
 {
-  -moz-image-region: rect(24px 24px 48px  0px);
+  -moz-image-region: rect(24px 32px 40px 16px);
 }
-[iconsize="small"] #econtrol-toolbar-button
+[iconsize="small"] .active#remotecontrol-toolbar-button
 {
-  -moz-image-region: rect( 0px 40px 16px 24px);
-}
-[iconsize="small"] #econtrol-toolbar-button:hover
-{
-  -moz-image-region: rect(24px 40px 40px 24px);
+  -moz-image-region: rect(24px 16px 40px 0px);
 }

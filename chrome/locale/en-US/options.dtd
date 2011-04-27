@@ -1,8 +1,6 @@
-<!ENTITY prefwindow.title "External Control preferences">
-<!ENTITY pane1.title "External Control preferences">
-<!ENTITY checkboolpref.label "A Boolean Preference">
-<!ENTITY checkboolpref.accesskey "B">
-<!ENTITY intpref.label "An Integer Preference">
-<!ENTITY intpref.accesskey "I">
-<!ENTITY stringpref.label "A String Preference">
-<!ENTITY stringpref.accesskey "S">
+<!ENTITY prefwindow.title "Remote Control preferences">
+<!ENTITY pane1.title "Remote Control preferences">
+<!ENTITY localhostOnly.label "Listen on localhost only">
+<!ENTITY localhostOnly.accesskey "L">
+<!ENTITY portNumber.label "Port Number to Listen on">
+<!ENTITY portNumber.accesskey "P">

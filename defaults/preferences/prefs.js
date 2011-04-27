@@ -1,6 +1,5 @@
-pref("extensions.econtrol.boolpref", false);
-pref("extensions.econtrol.intpref", 0);
-pref("extensions.econtrol.stringpref", "A string");
+pref("extensions.remotecontrol.localhostOnly", true);
+pref("extensions.remotecontrol.portNumber", 32000);
 
 // https://developer.mozilla.org/en/Localizing_extension_descriptions
-pref("extensions.external-control@morch.com.description", "chrome://econtrol/locale/overlay.properties");
+pref("extensions.remote-control@morch.com.description", "chrome://remotecontrol/locale/overlay.properties");

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<!DOCTYPE prefwindow SYSTEM "chrome://econtrol/locale/options.dtd">
-<prefwindow id="econtrol-preferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&prefwindow.title;">
+<!DOCTYPE prefwindow SYSTEM "chrome://remotecontrol/locale/options.dtd">
+<prefwindow id="remotecontrol-preferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&prefwindow.title;">
   <prefpane id="pane1" label="&pane1.title;">
     <preferences>
-      <preference id="boolpref1" name="extensions.econtrol.boolpref" type="bool"/>
-      <preference id="intpref1" name="extensions.econtrol.intpref" type="int"/>
-      <preference id="stringpref1" name="extensions.econtrol.stringpref" type="string"/> <!-- note that this is only an ASCII string - use unichar for unicode strings -->
+      <preference id="localhostOnly" name="extensions.remotecontrol.localhostOnly" type="bool"/>
+      <preference id="portNumber" name="extensions.remotecontrol.portNumber" type="int"/>
     </preferences>
-    <checkbox id="checkboolpref" preference="boolpref1" label="&checkboolpref.label;" accesskey="&checkboolpref.accesskey;"/>
-    <label accesskey="&intpref.accesskey;" control="textintpref">&intpref.label;</label><textbox id="textintpref" preference="intpref1"/>
-    <label accesskey="&stringpref.accesskey;" control="textstringpref">&stringpref.label;</label><textbox id="textstringpref" preference="stringpref1"/>
+    <checkbox id="localhostOnly" preference="localhostOnly" label="&localhostOnly.label;" accesskey="&localhostOnly.accesskey;"/>
+    <label accesskey="&portNumber.accesskey;" control="portNumber">&portNumber.label;</label><textbox id="portNumber" preference="portNumber"/>
   </prefpane>
 </prefwindow>
