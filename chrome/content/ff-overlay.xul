@@ -2,6 +2,7 @@
 <?xml-stylesheet href="chrome://remotecontrol/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://remotecontrol/locale/overlay.dtd">
 <overlay id="remotecontrol-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="evalByEventPassing.js"/>
   <script src="overlay.js"/>
   <script src="ff-overlay.js"/>
 

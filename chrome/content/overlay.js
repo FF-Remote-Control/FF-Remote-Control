@@ -43,18 +43,19 @@ remotecontrol = {
         remotecontrol.controlledWindow = wm.getMostRecentWindow(
                 'navigator:browser'
             ).getBrowser().contentWindow;
+
         var reader = {
             onInputStreamReady : function(input) {
                 // remotecontrol.log("onInputStreamReady");
                 var sin = Cc["@mozilla.org/scriptableinputstream;1"]
                             .createInstance(Ci.nsIScriptableInputStream);
                 sin.init(input);
-                var request = '';
+                var command = '';
                 try {
                     while (sin.available()) {
                       // remotecontrol.log("reading...");
-                      request = request + sin.read(512);
-                      // remotecontrol.log("...read:" + request);
+                      command = command + sin.read(512);
+                      // remotecontrol.log("...read:" + command);
                     }
                 } catch (e) {
                     if (e.name == "NS_BASE_STREAM_CLOSED") {
@@ -75,75 +76,72 @@ remotecontrol = {
                         // and then onInputStreamReady gets called *again*
                         // because the stream was closed.
                         if (! this.printedCloseMessage) {
-                            remotecontrol.log("Remote Control: Connection from " +
-                                         this.host + ':' + this.port +
-                                         ' was closed');
+                            remotecontrol.log(
+                                "Remote Control: Connection from " +
+                                 this.host + ':' + this.port +
+                                 ' was closed'
+                            );
                             this.printedCloseMessage = 1;
                         }
                     } else {
-                        remotecontrol.log("getting request failed: " + e );
+                        remotecontrol.log("getting command failed: " + e );
                     }
                 }
-                if (request == "") {
+                if (command == "") {
                     // Ok, nothing to do here
                     return;
                 }
                 // Get rid of any newlines
-                request = request.replace(/\n*$/, '').replace(/\r*$/, '');
+                command = command.replace(/\n*$/, '').replace(/\r*$/, '');
                 // Convert it to UTF-8
                 var utf8Converter = Components.classes[
                         "@mozilla.org/intl/utf8converterservice;1"
                     ].getService(Components.interfaces.nsIUTF8ConverterService);
-                // remotecontrol.log("request:"+request);
+                // remotecontrol.log("command:"+command);
                 try {
-                    request = utf8Converter.convertStringToUTF8(
-                        request, "UTF-8", false
+                    command = utf8Converter.convertStringToUTF8(
+                        command, "UTF-8", false
                     );
                 } catch (e) {
                     throw new Error("Converting to UTF-8 failed: " + e);
                 }
-                var evalResult;
-                try {
-                    if (request == "reload") {
-                        evalResult = {
-                            result: remotecontrol.evalScript(
-                                "window.location.reload()"
-                            )
-                        };
-                    } else {
-                        evalResult = {
-                            result: remotecontrol.evalScript(request)
-                        }
-                    }
-                } catch (e) {
-                    evalResult = {
-                        error: e.toString()
-                    }
+
+                if (command == "reload") {
+                    command = "window.location.reload()";
                 }
-                remotecontrol.log(["Remote Control command:", {
-                    'request': request,
-                    'result' : evalResult
-                }]);
-                // remotecontrol.log(evalResult);
-                var nativeJSON = Cc["@mozilla.org/dom/json;1"]
-                    .createInstance(Ci.nsIJSON);
-                // Why doesn't this work even for small values? Hmm...
-                // nativeJSON.encodeToStream(this.output,
-                //                           'UTF-8', false, evalResult);
-                var outStr;
-                try {
-                    outStr = nativeJSON.encode(evalResult) + "\n";
-                } catch(e) {
-                    // Try again, but this time just the exception.
-                    // (nativeJSON.encode has been known to throw exceptions -
-                    // try giving the command document (that would return the
-                    // document - which is huge!)
-                    outStr = nativeJSON.encode({error:
-                        "Error encoding JSON string for result/error. " +
-                        "Was it too large?"
-                    }) + "\n";
-                }
-                this.output.write(outStr, outStr.length);
+                var outerThis = this;
+                var callback = function (result) {
+                    var nativeJSON = Cc["@mozilla.org/dom/json;1"]
+                        .createInstance(Ci.nsIJSON);
+                    // Why doesn't this work even for small values? Hmm...
+                    // nativeJSON.encodeToStream(outerThis.output,
+                    //                           'UTF-8', false, response);
+                    var outStr;
+                    try {
+                        outStr = nativeJSON.encode(result) + "\n";
+                        remotecontrol.log(["Remote Control result", result]);
+                    } catch(e) {
+                        // Try again, but this time just the exception.
+                        // (nativeJSON.encode has been known to throw
+                        // exceptions - to trigger this, try giving the command
+                        // "window" (that would return the window - which is
+                        // huge!)
+                        outStr = nativeJSON.encode({error:
+                            "Error encoding JSON string for result/error. " +
+                            "Was it too large?"
+                        }) + "\n";
+                        remotecontrol.log(["Remote Control result error",
+                                           result]);
+                    }
+                    outerThis.output.write(outStr, outStr.length);
+                };
+
+                remotecontrol.log(["Remote Control command", command]);
+
+                evalByEventPassing( remotecontrol.controlledWindow,
+                                    command,
+                                    callback );
+
                 var tm = Cc["@mozilla.org/thread-manager;1"].getService();
                 input.asyncWait(this,0,0,tm.mainThread);
             }
@@ -215,24 +213,6 @@ remotecontrol = {
 
     onToolbarButtonCommand: function(e) {
         this.toggleControlSocket(e);
-    },
-
-    evalScript: function(script) {
-        // Inspiration for this came from
-        // http://forums.mozillazine.org/viewtopic.php?f=19&t=1517525
-        // and from
-        // http://kailaspatil.blogspot.com/2010/12/firefox-extension.html
-        if (this.controlledWindow == null) {
-            return null;
-        }
-        var sandbox = new Components.utils.Sandbox(
-            this.controlledWindow.wrappedJSObject
-        );
-
-        // See http://kailaspatil.blogspot.com/2010/12/firefox-extension.html
-        sandbox.__proto__ = this.controlledWindow.wrappedJSObject;
-        sandbox.window = this.controlledWindow.wrappedJSObject;
-        return Components.utils.evalInSandbox(script, sandbox);
     },
 
     getPreferences: function () {
