@@ -1,9 +1,30 @@
+Add on page:
+https://addons.mozilla.org/en-US/firefox/addon/remote-control/
+
 Review Process
 https://addons.mozilla.org/en-US/developers/docs/policies/reviews
 Security best practices in extensions - MDC Doc Center
 https://developer.mozilla.org/en/Security_best_practices_in_extensions
 
+Extension development: How do I direct Firebug.Console.log output to a particular window's console? - Firebug | Google Groups
+http://groups.google.com/group/firebug/browse_frm/thread/ae9139b818690c46#
+
+My posting about evalInSandbox()
+http://groups.google.com/group/mozilla.dev.extensions/browse_frm/thread/6cacc96b42a04e73#
+
+Communication between firefox extension and page javascript - Stack Overflow
+http://stackoverflow.com/questions/1305164/communication-between-firefox-extension-and-page-javascript
+
+And the other way:
+How to create my own HTMLEvent onMyOwnEvent="alert('Hey • mozillaZine Forums
+http://forums.mozillazine.org/viewtopic.php?p=3192410#3192410
+
+Firebug command line code
 http://code.google.com/p/fbug/source/browse/branches/firebug1.8/content/firebug/commandLine.js
+
+message based sandbox (didn't actually work in a vanilla extension - thanks for playing though)
+Source for "Content Global Reader" - Userscripts.org
+http://userscripts.org/scripts/review/85398
 
 Using nsILoginManager - MDC Doc Center
 https://developer.mozilla.org/en/XPCOM_Interface_Reference/Using_nsILoginManager
@@ -26,6 +47,24 @@ Basics on how to open a listening socket in a Firefox Extension
 Using sockets (nsIServerSocket) in XPCOM component (Firefox Extension) (sockets + new window = seg faults) - Stack Overflow
 http://stackoverflow.com/questions/3176442/using-sockets-nsiserversocket-in-xpcom-component-firefox-extension-sockets
 
+Dynamically loading an external JavaScript or CSS file
+http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
+
+Javascript global eval
+================================
+
+digital sanitation engineering: javascript eval in global scope
+http://blog.client9.com/2008/11/javascript-eval-in-global-scope.html
+
+Javascript eval on global scope? - Stack Overflow
+http://stackoverflow.com/questions/4670805/javascript-eval-on-global-scope
+
+Joseph Smarr » Fixing eval() to use global scope in IE
+http://josephsmarr.com/2007/01/31/fixing-eval-to-use-global-scope-in-ie/
+
+Perfection kills » Global eval. What are the options?
+http://perfectionkills.com/global-eval-what-are-the-options/#indirect_eval_call_theory
+
 Adding a toolbar icon by default
 ================================
 
@@ -37,5 +76,3 @@ https://developer.mozilla.org/En/Code_snippets/On_page_load#Running_code_on_an_e
 
 Retrieving the version of an extension as specified in the extension's install.rdf
 https://developer.mozilla.org/en/Code_snippets/Miscellaneous#Retrieving_the_version_of_an_extension_as_specified_in_the_extension%27s_install.rdf
-
-
