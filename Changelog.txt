@@ -1,0 +1,6 @@
+Version 0.2
+- Handles all javascript by using new evalByEventPassing()
+- Handles UTF-8 encoding properly for both input and output
+- Added a link to the home page and a proper description
+Version 0.1
+- Initial version. Uses Components.utils.evalInSandbox()
