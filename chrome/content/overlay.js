@@ -133,6 +133,31 @@ remotecontrol = {
                         remotecontrol.log(["Remote Control result error",
                                            result]);
                     }
+
+                    // E.g. try: echo '"æ"' | nc -q 1 localhost 32000
+
+                    // Convert it to UTF-8. Without this conversion, an 'æ',
+                    // which is two bytes in UTF8 gets sent out as one byte on
+                    // the output.write further down. For some reason, this
+                    // utf8Converter doesn't work. I don't know why.
+                    //
+                    // var utf8Converter = Components.classes[
+                    //         "@mozilla.org/intl/utf8converterservice;1"
+                    //     ].getService(
+                    //         Components.interfaces.nsIUTF8ConverterService
+                    //     );
+                    // try {
+                    //     outStr = utf8Converter.convertStringToUTF8(
+                    //         outStr, "ISO-8859-1", false
+                    //     );
+                    // } catch (e) {
+                    //     outStr = "UTF8 Conversion failed " +
+                    //              e.message + "\n";
+                    // }
+
+                    // This does work, however. It comes from:
+                    // http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
+                    outStr = unescape(encodeURIComponent(outStr));
                     outerThis.output.write(outStr, outStr.length);
                 };
 
