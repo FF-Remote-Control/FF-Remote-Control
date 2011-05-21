@@ -47,74 +47,64 @@ remotecontrol = {
         var reader = {
             onInputStreamReady : function(input) {
                 // remotecontrol.log("onInputStreamReady");
-                var sin = Cc["@mozilla.org/scriptableinputstream;1"]
-                            .createInstance(Ci.nsIScriptableInputStream);
-                sin.init(input);
-                var command = '';
-                try {
-                    while (sin.available()) {
-                      // remotecontrol.log("reading...");
-                      command = command + sin.read(512);
-                      // remotecontrol.log("...read:" + command);
-                    }
-                } catch (e) {
-                    if (e.name == "NS_BASE_STREAM_CLOSED") {
-                        // When run like this:
-                        //
-                        // echo "command" | nc localhost $port
-                        //
-                        // the socket gets closed immediately. Don't fail
-                        // because of that.
-                        //
-                        // remotecontrol.log("NS_BASE_STREAM_CLOSED - " +
-                        //          " thats fine (almost expected)");
-                        // remotecontrol.log(e);
 
-                        // Avoid printing this twice. With the nc line above,
-                        // it would otherwise get printed twice. Once for when
-                        // sin.available detects that the stream has closed,
-                        // and then onInputStreamReady gets called *again*
-                        // because the stream was closed.
-                        if (! this.printedCloseMessage) {
-                            remotecontrol.log(
-                                "Remote Control: Connection from " +
-                                 this.host + ':' + this.port +
-                                 ' was closed'
-                            );
-                            this.printedCloseMessage = 1;
-                        }
-                    } else {
-                        remotecontrol.log("getting command failed: " + e );
-                    }
+                // On EOF, we first get told about EOF when cont is false
+                // below, and then we get called here in onInputStreamReady
+                // again because of the EOF. Lets just return when that happens
+                try {
+                    // available() throws an exception when the socket has been
+                    // closed
+                    this.input.available();
+                } catch (e) {
+                    remotecontrol.log(
+                        "Remote Control: Connection from " +
+                         this.host + ':' + this.port +
+                         ' was closed'
+                    );
+                    this.utf8Input.close();
+                    this.input.close();
+                    this.utf8Output.close();
+                    this.output.close();
+                    return;
                 }
+
+                var cont = true;
+                while (cont) {
+                    try {
+                        var readLineResult = {};
+                        cont = this.utf8Input.readLine(readLineResult);
+                        command = readLineResult.value;
+                    } catch (e) {
+                        remotecontrol.log(['Remote Control Internal Error - '+
+                                           'reading a command line caused an '+
+                                           'exception:', e.message]);
+                    }
+                    this.handleOneCommand(command);
+                }
+
+                var tm = Cc["@mozilla.org/thread-manager;1"].getService();
+                input.asyncWait(this,0,0,tm.mainThread);
+            },
+            handleOneCommand: function (command) {
                 if (command == "") {
-                    // Ok, nothing to do here
                     return;
                 }
                 // Get rid of any newlines
                 command = command.replace(/\n*$/, '').replace(/\r*$/, '');
-                // Convert it to UTF-8
-                var utf8Converter = Components.classes[
-                        "@mozilla.org/intl/utf8converterservice;1"
-                    ].getService(Components.interfaces.nsIUTF8ConverterService);
-                // remotecontrol.log("command:"+command);
-                try {
-                    command = utf8Converter.convertStringToUTF8(
-                        command, "UTF-8", false
-                    );
-                } catch (e) {
-                    throw new Error("Converting to UTF-8 failed: " + e);
-                }
+
+                remotecontrol.log(["Remote Control command", command]);
 
                 if (command == "reload") {
                     command = "window.location.reload()";
                 }
-                var outerThis = this;
+
+                var reader = this;
                 var callback = function (result) {
+                    // remotecontrol.log("callback");
                     var nativeJSON = Cc["@mozilla.org/dom/json;1"]
                         .createInstance(Ci.nsIJSON);
                     // Why doesn't this work even for small values? Hmm...
-                    // nativeJSON.encodeToStream(outerThis.output,
+                    // nativeJSON.encodeToStream(reader.utf8Output,
                     //                           'UTF-8', false, response);
                     var outStr;
                     try {
@@ -133,42 +123,12 @@ remotecontrol = {
                         remotecontrol.log(["Remote Control result error",
                                            result]);
                     }
-
-                    // E.g. try: echo '"æ"' | nc -q 1 localhost 32000
-
-                    // Convert it to UTF-8. Without this conversion, an 'æ',
-                    // which is two bytes in UTF8 gets sent out as one byte on
-                    // the output.write further down. For some reason, this
-                    // utf8Converter doesn't work. I don't know why.
-                    //
-                    // var utf8Converter = Components.classes[
-                    //         "@mozilla.org/intl/utf8converterservice;1"
-                    //     ].getService(
-                    //         Components.interfaces.nsIUTF8ConverterService
-                    //     );
-                    // try {
-                    //     outStr = utf8Converter.convertStringToUTF8(
-                    //         outStr, "ISO-8859-1", false
-                    //     );
-                    // } catch (e) {
-                    //     outStr = "UTF8 Conversion failed " +
-                    //              e.message + "\n";
-                    // }
-
-                    // This does work, however. It comes from:
-                    // http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
-                    outStr = unescape(encodeURIComponent(outStr));
-                    outerThis.output.write(outStr, outStr.length);
+                    reader.utf8Output.writeString(outStr);
                 };
-
-                remotecontrol.log(["Remote Control command", command]);
 
                 evalByEventPassing( remotecontrol.controlledWindow,
                                     command,
                                     callback );
-
-                var tm = Cc["@mozilla.org/thread-manager;1"].getService();
-                input.asyncWait(this,0,0,tm.mainThread);
             }
         }
         var listener = {
@@ -178,12 +138,40 @@ remotecontrol = {
                          ":"+
                          transport.port);
                 var input = transport.openInputStream(0, 0, 0);
+                var utf8Input = Components.classes[
+                    "@mozilla.org/intl/converter-input-stream;1"
+                ].createInstance(
+                    Components.interfaces.nsIConverterInputStream
+                );
+                utf8Input.init(
+                    input, "UTF-8", 0,
+                    Components.interfaces.nsIConverterInputStream.
+                        DEFAULT_REPLACEMENT_CHARACTER
+                );
+                // I'm not reall sure what this does, but if it is missing,
+                // then readLine() doesn't work
+                utf8Input.QueryInterface(
+                    Components.interfaces.nsIUnicharLineInputStream
+                );
+
                 var output = transport
                     .openOutputStream(Ci.nsITransport.OPEN_BLOCKING, 0, 0);
+                var utf8Output = Components.classes[
+                    "@mozilla.org/intl/converter-output-stream;1"
+                ].createInstance(
+                    Components.interfaces.nsIConverterOutputStream
+                );
+                utf8Output.init(output, "UTF-8", 0, 0x0000);
+
                 var tm = Cc["@mozilla.org/thread-manager;1"].getService();
                 var thisReader = object(reader);
+
                 thisReader.input = input;
+                thisReader.utf8Input = utf8Input;
+
                 thisReader.output = output;
+                thisReader.utf8Output = utf8Output;
+
                 thisReader.host = transport.host;
                 thisReader.port = transport.port;
                 input.asyncWait(thisReader,0,0,tm.mainThread);
