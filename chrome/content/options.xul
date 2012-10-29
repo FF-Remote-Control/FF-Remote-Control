@@ -5,9 +5,12 @@
   <prefpane id="pane1" label="&pane1.title;">
     <preferences>
       <preference id="localhostOnly" name="extensions.remotecontrol.localhostOnly" type="bool"/>
+      <preference id="activeTab" name="extensions.remotecontrol.activeTab" type="bool"/>
       <preference id="portNumber" name="extensions.remotecontrol.portNumber" type="int"/>
     </preferences>
     <checkbox id="localhostOnly" preference="localhostOnly" label="&localhostOnly.label;" accesskey="&localhostOnly.accesskey;"/>
     <label accesskey="&portNumber.accesskey;" control="portNumber">&portNumber.label;</label><textbox id="portNumber" preference="portNumber"/>
+    <separator class="groove-thin"/>
+    <checkbox id="activeTab" preference="activeTab" label="&activeTab.label;" accesskey="&activeTab.accesskey;"/>
   </prefpane>
 </prefwindow>
