@@ -89,6 +89,13 @@ remotecontrol = {
                 if (command == "") {
                     return;
                 }
+                if (prefs.activeTab) {
+                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
+                        .getService(Components.interfaces.nsIWindowMediator);
+                    remotecontrol.controlledWindow = wm.getMostRecentWindow(
+                            'navigator:browser'
+                        ).getBrowser().contentWindow;
+                }
                 // Get rid of any newlines
                 command = command.replace(/\n*$/, '').replace(/\r*$/, '');
 
@@ -96,6 +103,18 @@ remotecontrol = {
 
                 if (command == "reload") {
                     command = "window.location.reload()";
+                } else if(command == "newtab") {
+                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
+                        .getService(Components.interfaces.nsIWindowMediator);
+                    var mainWindow = wm.getMostRecentWindow("navigator:browser");
+                    mainWindow.getBrowser().selectedTab = mainWindow.getBrowser().addTab("about:blank");
+
+
+                    var nativeJSON = Cc["@mozilla.org/dom/json;1"]
+                        .createInstance(Ci.nsIJSON);
+                    var outStr = nativeJSON.encode({result: "OK"}) + "\n";
+                    this.utf8Output.writeString(outStr);
+                    return;
                 }
 
                 var reader = this;
@@ -238,7 +257,10 @@ remotecontrol = {
             var portNumber = prefManager.getIntPref(
                 "extensions.remotecontrol.portNumber"
             );
-            return { localhostOnly: localhostOnly, portNumber: portNumber };
+            var activeTab = prefManager.getBoolPref(
+                "extensions.remotecontrol.activeTab"
+            );
+            return { localhostOnly: localhostOnly, portNumber: portNumber, activeTab: activeTab };
     },
 
     alignToolbarButton: function() {
