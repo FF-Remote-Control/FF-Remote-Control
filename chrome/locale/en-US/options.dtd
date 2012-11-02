@@ -4,3 +4,5 @@
 <!ENTITY localhostOnly.accesskey "L">
 <!ENTITY portNumber.label "Port Number to Listen on">
 <!ENTITY portNumber.accesskey "P">
+<!ENTITY activeTab.label "Send remote commands to currently active tab">
+<!ENTITY activeTab.accesskey "T">
