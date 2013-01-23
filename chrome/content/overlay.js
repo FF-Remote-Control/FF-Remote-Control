@@ -269,7 +269,11 @@ remotecontrol = {
             var activeTab = prefManager.getBoolPref(
                 "extensions.remotecontrol.activeTab"
             );
-            return { localhostOnly: localhostOnly, portNumber: portNumber, activeTab: activeTab };
+            return {
+                localhostOnly: localhostOnly,
+                portNumber: portNumber,
+                activeTab: activeTab
+            };
     },
 
     alignToolbarButton: function() {
