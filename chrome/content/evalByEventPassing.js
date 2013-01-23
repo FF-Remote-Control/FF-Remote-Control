@@ -2,7 +2,7 @@
     Synopsis
     ========
 
-    // Get value of global variable aVariable
+    // Display result from setting global variable myVariable (==45)
     evalByEventPassing(window, 'myVariable=45', function (result) {
         if (result.error) {
             Firebug.Console.log(["an error occurred", result.error]);
@@ -60,6 +60,17 @@
     enable the malicious caller to set up any of its own code to be called as a
     callback, only alter which of the real callbacks get called for which
     command. If anyone knows how to avoid this, patches are welcome.
+
+    Inspiration
+    ===========
+
+    "Interaction between privileged and non-privileged pages"
+    https://developer.mozilla.org/en-US/docs/Code_snippets/Interaction_between_privileged_and_non-privileged_pages
+
+    "Communication between firefox extension and page javascript"
+    http://stackoverflow.com/questions/1305164/
+
+    and Firebug's function evaluateByEventPassing
 
     Author
     ======
