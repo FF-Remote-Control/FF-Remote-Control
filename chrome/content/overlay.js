@@ -278,6 +278,8 @@ remotecontrol = {
 
     alignToolbarButton: function() {
         var button = document.getElementById("remotecontrol-toolbar-button");
+        if (! button)
+            return;
         var ttText;
         if (this.active) {
             // Add the 'active' class
