@@ -25,6 +25,15 @@ remotecontrol = {
         this.initialized = true;
         this.strings = document.getElementById("remotecontrol-strings");
         this.alignToolbarButton();
+
+        var firstRunPref = "extensions.remotecontrol.firstRunDone";
+        var prefManager = Components.classes[
+            "@mozilla.org/preferences-service;1"
+        ].getService(Components.interfaces.nsIPrefBranch);
+        if (prefManager.getBoolPref(firstRunPref)) {
+            prefManager.setBoolPref(firstRunPref, false)
+            this.firstRun();
+        }
     },
 
     log: function (msg) {
@@ -286,6 +295,23 @@ remotecontrol = {
             ttText = this.strings.getString('disabledToolbarTooltip');
         }
         button.setAttribute('tooltiptext', ttText);
+    },
+
+    // Modified from https://developer.mozilla.org/en-US/docs/Code_snippets/Toolbar?redirectlocale=en-US&redirectslug=Code_snippets%3AToolbar#Adding_button_by_default
+    installToolbarButton: function () {
+        var buttonID = 'remotecontrol-toolbar-button';
+        if (!document.getElementById(buttonID)) {
+            var toolbar = document.getElementById('nav-bar');
+            toolbar.insertItem(buttonID, null);
+            toolbar.setAttribute("currentset", toolbar.currentSet);
+            document.persist(toolbar.id, "currentset");
+
+            this.alignToolbarButton();
+        }
+    },
+
+    firstRun: function () {
+        this.installToolbarButton();
     }
 };
 
