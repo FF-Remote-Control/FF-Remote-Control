@@ -20,7 +20,7 @@ How to create my own HTMLEvent onMyOwnEvent="alert('Hey • mozillaZine Forums
 http://forums.mozillazine.org/viewtopic.php?p=3192410#3192410
 
 Firebug command line code
-http://code.google.com/p/fbug/source/browse/branches/firebug1.8/content/firebug/commandLine.js
+http://code.google.com/p/fbug/source/browse/branches/firebug1.8/content/firebug/console/commandLine.js
 
 message based sandbox (didn't actually work in a vanilla extension - thanks for playing though)
 Source for "Content Global Reader" - Userscripts.org
