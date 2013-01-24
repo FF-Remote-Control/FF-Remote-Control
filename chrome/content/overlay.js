@@ -19,6 +19,7 @@ remotecontrol = {
     controlledWindow: null,
     serverSocket: null,
     active: false,
+    buttonID: 'remotecontrol-toolbar-button',
 
     onLoad: function() {
         // initialization code
@@ -34,6 +35,8 @@ remotecontrol = {
             prefManager.setBoolPref(firstRunPref, false)
             this.firstRun();
         }
+
+        this.maybeStartAutomatically();
     },
 
     log: function (msg) {
@@ -247,6 +250,27 @@ remotecontrol = {
         }
     },
 
+    // OK so deciding whether to start automatically based on an environment
+    // variable is kind of hacky, but it was much easier to do than to process
+    // command line arguments. See e.g.:
+    //
+    // "passing command line option to firebug"
+    // https://groups.google.com/forum/?fromgroups=#!topic/firebug/TOcrlXxYl90
+    maybeStartAutomatically: function () {
+        var button = document.getElementById(this.buttonID);
+        // Don't allow remote control to start if the icon isn't in the
+        // nav-bar.
+        if (! button)
+            return;
+        var start = Components.classes["@mozilla.org/process/environment;1"]
+                        .getService(Components.interfaces.nsIEnvironment)
+                        .get('START_REMOTE_CONTROL');
+        if (start) {
+            this.startControlSocket();
+        }
+
+    },
+
     onMenuItemCommand: function(e) {
         this.toggleControlSocket();
     },
@@ -276,7 +300,7 @@ remotecontrol = {
     },
 
     alignToolbarButton: function() {
-        var button = document.getElementById("remotecontrol-toolbar-button");
+        var button = document.getElementById(this.buttonID);
         if (! button)
             return;
         var ttText;
@@ -304,8 +328,7 @@ remotecontrol = {
 
     // Modified from https://developer.mozilla.org/en-US/docs/Code_snippets/Toolbar?redirectlocale=en-US&redirectslug=Code_snippets%3AToolbar#Adding_button_by_default
     installToolbarButton: function () {
-        var buttonID = 'remotecontrol-toolbar-button';
-        if (!document.getElementById(buttonID)) {
+        if (!document.getElementById(this.buttonID)) {
             var toolbar = document.getElementById('nav-bar');
             toolbar.insertItem(buttonID, null);
             toolbar.setAttribute("currentset", toolbar.currentSet);

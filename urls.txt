@@ -76,3 +76,6 @@ https://developer.mozilla.org/En/Code_snippets/On_page_load#Running_code_on_an_e
 
 Retrieving the version of an extension as specified in the extension's install.rdf
 https://developer.mozilla.org/en/Code_snippets/Miscellaneous#Retrieving_the_version_of_an_extension_as_specified_in_the_extension%27s_install.rdf
+
+"passing command line option to firebug"
+https://groups.google.com/forum/?fromgroups=#!topic/firebug/TOcrlXxYl90
