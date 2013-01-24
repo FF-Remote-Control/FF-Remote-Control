@@ -15,7 +15,7 @@ either a result or an error back JSON-encoded. As a convenience, a command of
 
 Using netcat/nc, you can therefore:
 
-    echo reload | nc localhost 32000
+    echo reload | nc -q 1 localhost 32000
 
 and the page will reload.
 
@@ -23,10 +23,6 @@ Getting Started
 ===============
 
 * Download and install the extension
-* Add the _Remote Control_ Toolbar button to your toolbar
-* Optionally change the preferences to select listening port number
-  (default=32000) or and whether or not to listen to connections from all hosts
-  or just localhost (default = localhost only).
 * Select a Firefox window or tab you want to remote control
 * Click the Remote Control toolbar button
     * If firebug is installed and active in that window, you can see logging in
@@ -35,10 +31,25 @@ Getting Started
 * Use telnet, nc or any other tool to send javascript commands to your Remote
   Controlled Firefox.
 
-**NOTE**: When firefox is initially started, Remote Control is _not_ active.
-You have to select a window/tab and start Remote Control by clicking the
-toolbar button. You can only remote control the selected window/tab.
+Preferences and Controlling Behavior
+====================================
 
+There are preferences for:
+
+* Whether to listen for connections from localhost only (default = localhost
+  only).
+* Which TCP port number to listen on (default=32000)
+* Whether to send remote commands to currently active tab (default=false)
+
+In addition, by default when firefox is initially started, Remote Control is
+_not_ active. You have to select a window/tab and start Remote Control by
+clicking the toolbar button.
+
+But it _is_ possible to start Remote Control automatically when Firefox starts
+by setting the environment START\_REMOTE\_CONTROL=1. If that environment
+variable is set _and_ the icon is present on the toolbar, it will start when
+Firefox starts. The requirement for the icon to be present is to avoid this
+extension being used for malicious purposes without the user knowing.
 
 Issues
 ======
