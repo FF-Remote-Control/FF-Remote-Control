@@ -4,7 +4,6 @@
 <overlay id="remotecontrol-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script src="evalByEventPassing.js"/>
   <script src="overlay.js"/>
-  <script src="ff-overlay.js"/>
 
   <stringbundleset id="stringbundleset">
     <stringbundle id="remotecontrol-strings" src="chrome://remotecontrol/locale/overlay.properties"/>
