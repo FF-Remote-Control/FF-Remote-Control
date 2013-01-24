@@ -44,7 +44,7 @@ remotecontrol = {
         };
     },
 
-    startControlSocket: function(e) {
+    startControlSocket: function() {
         var prefs = this.getPreferences();
 
         var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
@@ -227,7 +227,6 @@ remotecontrol = {
                      ' can connect)');
         this.active = true;
         this.alignToolbarButton();
-
     },
 
     stopControlSocket: function() {
@@ -240,20 +239,20 @@ remotecontrol = {
         this.alignToolbarButton();
     },
 
-    toggleControlSocket: function(e) {
+    toggleControlSocket: function() {
         if (this.active) {
-            this.stopControlSocket(e);
+            this.stopControlSocket();
         } else {
-            this.startControlSocket(e);
+            this.startControlSocket();
         }
     },
 
     onMenuItemCommand: function(e) {
-        this.toggleControlSocket(e);
+        this.toggleControlSocket();
     },
 
     onToolbarButtonCommand: function(e) {
-        this.toggleControlSocket(e);
+        this.toggleControlSocket();
     },
 
     getPreferences: function () {
