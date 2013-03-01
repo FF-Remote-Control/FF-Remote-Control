@@ -59,6 +59,7 @@ remotecontrol = {
         var reader = {
             onInputStreamReady : function(input) {
                 // remotecontrol.log("onInputStreamReady");
+                var command;
 
                 // On EOF, we first get told about EOF when cont is false
                 // below, and then we get called here in onInputStreamReady
