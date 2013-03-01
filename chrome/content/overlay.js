@@ -1,3 +1,4 @@
+"use strict";
 // This is global as it is accessed from outside this module
 var remotecontrol;
 

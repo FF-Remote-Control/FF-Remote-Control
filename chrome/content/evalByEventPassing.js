@@ -79,6 +79,8 @@
     peter@morch.com
 */
 
+"use strict";
+
 var evalByEventPassing;
 
 // Scope limiting
