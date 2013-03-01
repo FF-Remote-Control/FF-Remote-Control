@@ -1,3 +1,5 @@
+Version 1.0
+- Cleaned up all outstanding issues from bugtracker on github
 Version 0.2
 - Handles all javascript by using new evalByEventPassing()
 - Handles UTF-8 encoding properly for both input and output
