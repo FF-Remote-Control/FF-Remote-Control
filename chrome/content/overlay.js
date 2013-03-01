@@ -273,10 +273,6 @@ remotecontrol = {
 
     },
 
-    onMenuItemCommand: function(e) {
-        this.toggleControlSocket();
-    },
-
     onToolbarButtonCommand: function(e) {
         this.toggleControlSocket();
     },
