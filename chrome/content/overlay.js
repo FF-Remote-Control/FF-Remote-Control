@@ -330,7 +330,7 @@ remotecontrol = {
     installToolbarButton: function () {
         if (!document.getElementById(this.buttonID)) {
             var toolbar = document.getElementById('nav-bar');
-            toolbar.insertItem(buttonID, null);
+            toolbar.insertItem(this.buttonID, null);
             toolbar.setAttribute("currentset", toolbar.currentSet);
             document.persist(toolbar.id, "currentset");
 
