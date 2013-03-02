@@ -260,7 +260,7 @@ remotecontrol = {
             return;
         var start = Components.classes["@mozilla.org/process/environment;1"]
                         .getService(Components.interfaces.nsIEnvironment)
-                        .get('START_REMOTE_CONTROL');
+                        .get('FIREFOX_START_REMOTE_CONTROL');
         if (start) {
             this.startControlSocket();
         }
