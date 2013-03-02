@@ -97,7 +97,6 @@ function evalInSandbox(window, command) {
         window.wrappedJSObject
     );
     sandbox.__proto__ = window.wrappedJSObject;
-    sandbox.window = window.wrappedJSObject;
     // This seems to be the standard use of evalInSandbox in extensions
     return Components.utils.evalInSandbox(command, sandbox);
 }
