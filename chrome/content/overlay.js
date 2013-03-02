@@ -28,13 +28,14 @@ remotecontrol = {
         this.strings = document.getElementById("remotecontrol-strings");
         this.alignToolbarButton();
 
-        var firstRunPref = "extensions.remotecontrol.firstRunDone";
+        var buttonInstalledPref =
+            "extensions.remotecontrol.toolbarButtonInitiallyInstalled";
         var prefManager = Components.classes[
             "@mozilla.org/preferences-service;1"
         ].getService(Components.interfaces.nsIPrefBranch);
-        if (prefManager.getBoolPref(firstRunPref)) {
-            prefManager.setBoolPref(firstRunPref, false)
-            this.firstRun();
+        if (! prefManager.getBoolPref(buttonInstalledPref)) {
+            prefManager.setBoolPref(buttonInstalledPref, true)
+            this.installToolbarButton();
         }
 
         this.maybeStartAutomatically();
@@ -328,10 +329,6 @@ remotecontrol = {
             this.alignToolbarButton();
         }
     },
-
-    firstRun: function () {
-        this.installToolbarButton();
-    }
 };
 
 window.addEventListener("load", function () { remotecontrol.onLoad(); }, false);
