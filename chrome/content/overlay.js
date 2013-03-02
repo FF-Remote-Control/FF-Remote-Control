@@ -124,9 +124,7 @@ remotecontrol = {
                     mainWindow.getBrowser().selectedTab = mainWindow.getBrowser().addTab("about:blank");
 
 
-                    var nativeJSON = Cc["@mozilla.org/dom/json;1"]
-                        .createInstance(Ci.nsIJSON);
-                    var outStr = nativeJSON.encode({result: "OK"}) + "\n";
+                    var outStr = JSON.stringify({result: "OK"}) + "\n";
                     this.utf8Output.writeString(outStr);
                     return;
                 }
@@ -134,22 +132,17 @@ remotecontrol = {
                 var reader = this;
                 var callback = function (result) {
                     // remotecontrol.log("callback");
-                    var nativeJSON = Cc["@mozilla.org/dom/json;1"]
-                        .createInstance(Ci.nsIJSON);
-                    // Why doesn't this work even for small values? Hmm...
-                    // nativeJSON.encodeToStream(reader.utf8Output,
-                    //                           'UTF-8', false, response);
                     var outStr;
                     try {
-                        outStr = nativeJSON.encode(result) + "\n";
+                        outStr = JSON.stringify(result) + "\n";
                         remotecontrol.log(["Remote Control result", result]);
                     } catch(e) {
                         // Try again, but this time just the exception.
-                        // (nativeJSON.encode has been known to throw
+                        // (JSON.stringify has been known to throw
                         // exceptions - to trigger this, try giving the command
                         // "window" (that would return the window - which is
                         // huge!)
-                        outStr = nativeJSON.encode({error:
+                        outStr = JSON.stringify({error:
                             "Error encoding JSON string for result/error. " +
                             "Was it too large?"
                         }) + "\n";

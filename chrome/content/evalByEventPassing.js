@@ -108,10 +108,8 @@ function handleResult(body, e) {
     var result = e.target.getAttribute('result');
     var callbackID = e.target.getAttribute('callbackID');
     body.removeChild(e.target);
-    var nativeJSON = Cc["@mozilla.org/dom/json;1"]
-        .createInstance(Ci.nsIJSON);
     try {
-        result = nativeJSON.decode(result);
+        result = JSON.parse(result);
     } catch (e) {
         // This should never happen since we encoded it ourselves, but
         // being defensive never hurt.
