@@ -2,6 +2,9 @@ content   remotecontrol                 chrome/content/
 skin      remotecontrol   classic/1.0   chrome/skin/
 locale    remotecontrol   en-US         chrome/locale/en-US/
 
-
 overlay   chrome://browser/content/browser.xul   chrome://remotecontrol/content/ff-overlay.xul
 style chrome://global/content/customizeToolbar.xul chrome://remotecontrol/skin/overlay.css
+
+component   {9D538A60-834E-11E2-8D9D-6F406188709B}   components/commandLineHandler.js
+contract    @morch.com/remotecontrol/command-line-handler;1    {9D538A60-834E-11E2-8D9D-6F406188709B}
+category    command-line-handler    m-remotecontrol-clh    @morch.com/remotecontrol/command-line-handler;1

@@ -8,6 +8,7 @@ var remotecontrol;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
+const Cu = Components.utils;
 
 // From http://javascript.crockford.com/prototypal.html
 function object(o) {
@@ -258,13 +259,15 @@ remotecontrol = {
         // nav-bar.
         if (! button)
             return;
-        var start = Components.classes["@mozilla.org/process/environment;1"]
-                        .getService(Components.interfaces.nsIEnvironment)
-                        .get('FIREFOX_START_REMOTE_CONTROL');
+        var start = Components.classes[
+                "@morch.com/remotecontrol/command-line-handler;1"
+            ]
+            .getService()
+            .wrappedJSObject
+            .remoteControlFlag;
         if (start) {
             this.startControlSocket();
         }
-
     },
 
     onToolbarButtonCommand: function(e) {
