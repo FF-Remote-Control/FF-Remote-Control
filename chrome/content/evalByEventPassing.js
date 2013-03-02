@@ -184,8 +184,8 @@ function initializeWindow(window) {
             false
         );
     }
-    scriptElement.innerHTML= setupEvalByEventPassing.toString() + ';' +
-                            'setupEvalByEventPassing()';
+    scriptElement.textContent = setupEvalByEventPassing.toString() + ';' +
+                                'setupEvalByEventPassing()';
     // By adding a script element to the page's <head>, we get the code
     // evaluated in the page's context
     document.getElementsByTagName("head")[0].appendChild(scriptElement);
