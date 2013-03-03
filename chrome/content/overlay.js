@@ -254,11 +254,6 @@ remotecontrol = {
     // "passing command line option to firebug"
     // https://groups.google.com/forum/?fromgroups=#!topic/firebug/TOcrlXxYl90
     maybeStartAutomatically: function () {
-        var button = document.getElementById(this.buttonID);
-        // Don't allow remote control to start if the icon isn't in the
-        // nav-bar.
-        if (! button)
-            return;
         var start = Components.classes[
                 "@morch.com/remotecontrol/command-line-handler;1"
             ]
