@@ -31,6 +31,14 @@ commandLineHandler.prototype =
         }
     },
 
+    startRemoteControlOnce: function () {
+        if (this.remoteControlFlag && ! this.remoteControlAlreadyStarted) {
+            this.remoteControlAlreadyStarted = true;
+            return true;
+        }
+        return false;
+    },
+
     helpInfo :
         "  -remote-control      "+
         "Start the Remote Control Extension automatically\n"

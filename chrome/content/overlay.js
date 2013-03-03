@@ -264,7 +264,7 @@ remotecontrol = {
             ]
             .getService()
             .wrappedJSObject
-            .remoteControlFlag;
+            .startRemoteControlOnce();
         if (start) {
             this.startControlSocket();
         }
