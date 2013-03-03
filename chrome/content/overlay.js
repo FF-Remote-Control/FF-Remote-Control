@@ -213,9 +213,32 @@ remotecontrol = {
         try {
             this.serverSocket.init(prefs.portNumber, prefs.localhostOnly, -1);
         } catch (e) {
+            // Don't leave this hanging around
+            delete this.serverSocket;
+
+            // Report error to user and log
             this.log('Could not initialize socket on port number ' +
                      prefs.portNumber);
-            throw new Error("serverSocket.init failed: " + e);
+
+            var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
+                          .getService(Components.interfaces.nsIPromptService);
+
+            // Localized version of:
+            //
+            // "Perhaps another window or another process\n"+
+            // "is already running Remote Control.\n\n"+
+            // errorString
+            prompts.alert(
+                null, "Remote Control",
+                this.strings.getFormattedString(
+                    "cantOpenControlSocket",
+                    [ prefs.portNumber ]
+                )
+            );
+
+            this.active = false;
+            this.alignToolbarButton();
+            return;
         }
 
         this.serverSocket.asyncListen(listener);
