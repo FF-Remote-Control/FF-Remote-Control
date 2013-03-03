@@ -216,6 +216,11 @@ remotecontrol = {
             // Don't leave this hanging around
             delete this.serverSocket;
 
+            var button = document.getElementById(this.buttonID);
+            if (button) {
+                button.checked = false;
+            }
+
             // Report error to user and log
             this.log('Could not initialize socket on port number ' +
                      prefs.portNumber);
@@ -285,6 +290,12 @@ remotecontrol = {
             .startRemoteControlOnce();
         if (start) {
             this.startControlSocket();
+
+            // Adjust button.checked state
+            var button = document.getElementById(this.buttonID);
+            if (button) {
+                button.checked = "true";
+            }
         }
     },
 
@@ -332,9 +343,11 @@ remotecontrol = {
                   prefs.portNumber
                 ]
             );
+            button.checked = "true";
         } else {
             button.className = button.className.replace(/ active/, '');
             ttText = this.strings.getString('disabledToolbarTooltip');
+            button.checked = false;
         }
         button.setAttribute('tooltiptext', ttText);
     },

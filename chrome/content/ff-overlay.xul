@@ -12,6 +12,7 @@
   <toolbarpalette id="BrowserToolbarPalette">
   <toolbarbutton id="remotecontrol-toolbar-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
     label="&remotecontrolToolbarButton.label;" tooltiptext="set-by-javascript"
+    type="checkbox"
     oncommand="remotecontrol.onToolbarButtonCommand()"/>
   </toolbarpalette>
 
