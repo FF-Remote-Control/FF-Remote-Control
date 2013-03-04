@@ -359,6 +359,9 @@ remotecontrol = {
     },
 };
 
-window.addEventListener("load", function () { remotecontrol.onLoad(); }, false);
+window.addEventListener("load",
+                        function () { remotecontrol.onLoad(); },
+                        false,
+                        false);
 
 })();

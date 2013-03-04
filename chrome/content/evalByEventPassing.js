@@ -179,7 +179,8 @@ function initializeWindow(window) {
         document.addEventListener(
             'evalByEventPassingCommandMessage',
             evalByEventPassingCommand,
-            false
+            false,
+            true
         );
     }
     scriptElement.textContent = setupEvalByEventPassing.toString() + ';' +
@@ -198,7 +199,8 @@ function initializeWindow(window) {
                                     event
                                 )
                               },
-                              false);
+                              false,
+                              true);
 
     // Firebug.Console.log("/initializeWindow");
 }
