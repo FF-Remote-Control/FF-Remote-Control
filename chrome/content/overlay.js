@@ -275,12 +275,6 @@ remotecontrol = {
         }
     },
 
-    // OK so deciding whether to start automatically based on an environment
-    // variable is kind of hacky, but it was much easier to do than to process
-    // command line arguments. See e.g.:
-    //
-    // "passing command line option to firebug"
-    // https://groups.google.com/forum/?fromgroups=#!topic/firebug/TOcrlXxYl90
     maybeStartAutomatically: function () {
         var start = Components.classes[
                 "@morch.com/remotecontrol/command-line-handler;1"
