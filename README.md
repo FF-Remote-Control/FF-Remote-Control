@@ -46,13 +46,11 @@ _not_ active. You have to select a window/tab and start Remote Control by
 clicking the toolbar button.
 
 But it _is_ possible to start Remote Control automatically when Firefox starts
-by setting the environment FIREFOX\_START\_REMOTE\_CONTROL=1. If that
-environment variable is set _and_ the icon is present on the toolbar, it will
+with the flag remote-control. If that flag is set _and_ the icon is present on the toolbar, it will
 start when Firefox starts. The requirement for the icon to be present is to
 avoid this extension being used for malicious purposes without the user
 knowing.
 
-Or you can start it via the command line
     firefox -remote-control
 
 Issues
