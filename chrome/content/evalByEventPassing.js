@@ -155,8 +155,22 @@ function initializeWindow(window) {
                     result = { 'error' : exception.message };
                 }
             }
+            function skipCycles() {
+                var seen = new Object(null);
+                return function(key, val) {
+                    if (val instanceof Object) {
+                        if (seen[val] == true) {
+                            return '<cycle>';
+                        } else {
+                            seen[val] = true;
+                        }
+                    }
+                    console.log(typeof(val));
+                    return val;
+                }
+            }
             try {
-                result = JSON.stringify(result);
+                result = JSON.stringify(result,skipCycles());
             } catch (e) {
                 // Try again, but this time just the exception.
                 // (nativeJSON.encode has been known to throw
@@ -167,7 +181,11 @@ function initializeWindow(window) {
                     "Error encoding JSON string for result/error. " +
                     "Was it too large?"
                 });
-                console.log(e);
+                if (e instanceof Error) {
+                    console.log(e.name + ': '+e.message);
+                } else {
+                    console.log(e);
+                }
             }
             element.setAttribute('result', result);
             var event = document.createEvent('Event');
