@@ -1,3 +1,8 @@
+Version 1.1
+- Updated chrome/content/overlay.js chaning log(msg) to 
+  console.log(msg), to make it work under Firefox 36.
+  Fix done by hari@smallpearl.com, on a forked copy
+  of the original source.
 Version 1.0
 - Cleaned up all outstanding issues from bugtracker on github
 Version 0.2
