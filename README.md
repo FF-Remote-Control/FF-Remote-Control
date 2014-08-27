@@ -19,28 +19,6 @@ Using netcat/nc, you can therefore:
 
 and the page will reload.
 
-If you are using VIM and if VIM is compiled with python support, you can add
-the following to your .vimrc to integrate the plugin with a VIM shortcut.
-
-    function! ReloadFirefox()
-    py << EOF
-    import socket
-    s = socket.socket()
-    s.settimeout(0.3)
-    s.connect(('x.x.x.x', 32000))
-    s.send('reload\n')
-    s.close()
-    EOF
-    endfunction
-    nmap <leader>r :call ReloadFirefox()<CR> 
-
-x.x.x.x should be replaced with actual IP of the machine running Firefox.
-
-With the above, pressing leader_key and r should cause the Firefox page 
-with the plugin activated to be refreshed. Of course, this is my key
-mapping and you're free to choose a different mapping, one that fits
-you best.
-
 Getting Started
 ===============
 
@@ -73,6 +51,39 @@ environment variable is set _and_ the icon is present on the toolbar, it will
 start when Firefox starts. The requirement for the icon to be present is to
 avoid this extension being used for malicious purposes without the user
 knowing.
+
+VIM Integration
+===============
+
+If you are using VIM and if VIM is compiled with python support, you can add
+the following to your .vimrc to integrate the plugin with a VIM shortcut.
+
+    function! ReloadFirefox()
+    py << EOF
+    import socket
+    s = socket.socket()
+    s.settimeout(0.3)
+    s.connect(('x.x.x.x', 32000))
+    s.send('reload\n')
+    s.close()
+    EOF
+    endfunction
+    nmap <leader>r :call ReloadFirefox()<CR> 
+
+x.x.x.x should be replaced with actual IP of the machine running Firefox. If
+FireFox is running on the same machine as VIM, you may use 127.0.0.1.
+
+With the above, pressing leader_key followed by r should cause the Firefox 
+page with the plugin activated to be refreshed. Of course, this is my key
+mapping and you're free to choose a different mapping, one that fits you 
+best.
+
+To test whether VIM is built with python support, run
+
+    vim --version
+
+and if you +python in the list of features, VIM is built with python
+support.
 
 Issues
 ======
