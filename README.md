@@ -82,8 +82,11 @@ To test whether VIM is built with python support, run
 
     vim --version
 
-and if you +python in the list of features, VIM is built with python
+and if you see +python in the list of features, VIM is built with python
 support.
+
+If you don't see +python, you can rebuild VIM from sources with +python support.
+Iinstructions for this can be found [here](https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source).
 
 Issues
 ======
