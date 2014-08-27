@@ -19,6 +19,26 @@ Using netcat/nc, you can therefore:
 
 and the page will reload.
 
+If you are using VIM and if VIM is compiled with python support, you can add
+the following to your .vimrc
+
+    function! ReloadFirefox()
+    py << EOF
+    import socket
+    s = socket.socket()
+    s.settimeout(0.3)
+    s.connect(('x.x.x.x', 32000))
+    s.send('reload\n')
+    s.close()
+    EOF
+    endfunction
+    nmap <leader>r :call ReloadFirefox()<CR> 
+
+x.x.x.x should be replaced with actual IP of the machine running Firefox.
+
+With the above, pressing <leader>r should cause the Firefox page with
+the pluging activated, to be refreshed.
+
 Getting Started
 ===============
 
