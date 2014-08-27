@@ -20,7 +20,7 @@ Using netcat/nc, you can therefore:
 and the page will reload.
 
 If you are using VIM and if VIM is compiled with python support, you can add
-the following to your .vimrc
+the following to your .vimrc to integrate the plugin with a VIM shortcut.
 
     function! ReloadFirefox()
     py << EOF
