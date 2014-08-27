@@ -36,8 +36,10 @@ the following to your .vimrc to integrate the plugin with a VIM shortcut.
 
 x.x.x.x should be replaced with actual IP of the machine running Firefox.
 
-With the above, pressing <leader>r should cause the Firefox page with
-the pluging activated, to be refreshed.
+With the above, pressing leader_key and r should cause the Firefox page 
+with the plugin activated to be refreshed. Of course, this is my key
+mapping and you're free to choose a different mapping, one that fits
+you best.
 
 Getting Started
 ===============
