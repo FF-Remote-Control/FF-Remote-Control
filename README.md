@@ -56,3 +56,10 @@ Issues
 ======
 Please report any problems to the
 [Issue tracker](https://github.com/pmorch/FF-Remote-Control/issues)
+
+License
+=======
+
+Remote Control is licensed under the
+[GNU General Public License v2.0](http://www.gnu.org/licenses/gpl-2.0.html)
+(See also [gpl-2.0.txt](gpl-2.0.txt))
