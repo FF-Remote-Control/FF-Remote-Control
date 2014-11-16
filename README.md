@@ -19,6 +19,17 @@ Using netcat/nc, you can therefore:
 
 and the page will reload.
 
+Project Status
+==============
+
+Alas, I find that other commitments leave me no time to work on this. Feel free
+to fork, take over or suggest what I should do with it. If somebody wants to
+take it over, feel free. Read
+[Issue #16](https://github.com/pmorch/FF-Remote-Control/issues/16)
+
+If a new project maintainer should emerge, I'm happy to put a link here to that
+new maintainer.
+
 Getting Started
 ===============
 
