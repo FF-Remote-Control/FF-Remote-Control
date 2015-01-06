@@ -86,7 +86,7 @@ var evalByEventPassing;
 // Scope limiting
 (function() {
 
-var callbacks = [];
+var callbacks = {};
 var callbackCounter = 0;
 
 // We need a sandbox-eval to safely test if we've initialized the page
