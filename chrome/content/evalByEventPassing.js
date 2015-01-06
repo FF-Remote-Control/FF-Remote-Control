@@ -141,37 +141,15 @@ function initializeWindow(window) {
                     result = { 'error' : exception.message };
                 }
             }
-            function skipCycles() {
-                var seen = new Object(null);
-                return function(key, val) {
-                    if (val instanceof Object) {
-                        if (seen[val] == true) {
-                            return '<cycle>';
-                        } else {
-                            seen[val] = true;
-                        }
-                    }
-                    console.log(typeof(val));
-                    return val;
-                }
-            }
             try {
-                result = JSON.stringify(result,skipCycles());
+                result = JSON.stringify(result);
             } catch (e) {
                 // Try again, but this time just the exception.
                 // (nativeJSON.encode has been known to throw
                 // exceptions - to trigger this, try giving the command
                 // "window" (that would return the window - which is
                 // huge!)
-                result = JSON.stringify({error:
-                    "Error encoding JSON string for result/error. " +
-                    "Was it too large?"
-                });
-                if (e instanceof Error) {
-                    console.log(e.name + ': '+e.message);
-                } else {
-                    console.log(e);
-                }
+                result = JSON.stringify({error: "Error encoding JSON string: " + e });
             }
             element.setAttribute('result', result);
             var event = document.createEvent('Event');
