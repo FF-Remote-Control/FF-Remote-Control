@@ -6,7 +6,7 @@
     <em:name>Remote Control</em:name>
     <em:version>1.2</em:version>
     <em:creator>Peter Valdemar Mørch</em:creator>
-    <em:homepageURL>https://github.com/nneonneo/FF-Remote-Control</em:homepageURL>
+    <em:homepageURL>https://github.com/FF-Remote-Control/FF-Remote-Control</em:homepageURL>
     <em:contributor>Hari Mahadevan</em:contributor>
     <em:contributor>Robert Xiao</em:contributor>
     <em:description>Remote control the browser by triggering a refresh or running arbitrary javascript in one of the browser's pages from outside e.g. from a script.

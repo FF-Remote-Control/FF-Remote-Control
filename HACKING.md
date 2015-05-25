@@ -1,10 +1,10 @@
 ## Reporting bugs
 
-Report them in the [Issue Tracker](https://github.com/pmorch/FF-Remote-Control/issues)
+Report them in the [Issue Tracker](https://github.com/FF-Remote-Control/FF-Remote-Control/issues)
 
 ## Repository
 
-This project lives at [GitHub](https://github.com/pmorch/FF-Remote-Control)
+This project lives on [GitHub](https://github.com/FF-Remote-Control/FF-Remote-Control)
 
 Clone it and send pull-requests!
 
