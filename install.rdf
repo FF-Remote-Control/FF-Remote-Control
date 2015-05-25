@@ -4,10 +4,11 @@
     <em:id>remote-control@morch.com</em:id>
     <em:type>2</em:type>
     <em:name>Remote Control</em:name>
-    <em:version>1.0</em:version>
+    <em:version>1.2</em:version>
     <em:creator>Peter Valdemar Mørch</em:creator>
-    <em:homepageURL>https://github.com/pmorch/FF-Remote-Control</em:homepageURL>
-    <em:contributor></em:contributor>
+    <em:homepageURL>https://github.com/nneonneo/FF-Remote-Control</em:homepageURL>
+    <em:contributor>Hari Mahadevan</em:contributor>
+    <em:contributor>Robert Xiao</em:contributor>
     <em:description>Remote control the browser by triggering a refresh or running arbitrary javascript in one of the browser's pages from outside e.g. from a script.
 
 This allows you to refresh the browser from your IDE, or to automate tests</em:description>
@@ -16,8 +17,8 @@ This allows you to refresh the browser from your IDE, or to automate tests</em:d
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
-        <em:minVersion>3.5</em:minVersion>
-        <em:maxVersion>5.*</em:maxVersion>
+        <em:minVersion>32.0</em:minVersion>
+        <em:maxVersion>37.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>

@@ -21,10 +21,10 @@ function deArray(log) {
     return function(msg) {
         if (typeof(msg) != "string") {
             for(var i = 0; i < msg.length; ++i) {
-                log(msg[i]);
+                console.log(msg[i]);
             }
         } else {
-            log(msg);
+            console.log(msg);
         }
     }
 }

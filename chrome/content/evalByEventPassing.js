@@ -86,22 +86,8 @@ var evalByEventPassing;
 // Scope limiting
 (function() {
 
-var callbacks = [];
+var callbacks = {};
 var callbackCounter = 0;
-
-// We need a sandbox-eval to safely test if we've initialized the page
-function evalInSandbox(window, command) {
-    // Inspiration for this came from
-    // http://forums.mozillazine.org/viewtopic.php?f=19&t=1517525
-    // and from
-    // http://kailaspatil.blogspot.com/2010/12/firefox-extension.html
-    var sandbox = new Components.utils.Sandbox(
-        window.wrappedJSObject
-    );
-    sandbox.__proto__ = window.wrappedJSObject;
-    // This seems to be the standard use of evalInSandbox in extensions
-    return Components.utils.evalInSandbox(command, sandbox);
-}
 
 function handleResult(body, e) {
     // Firebug.Console.log("handleResult");
@@ -155,37 +141,15 @@ function initializeWindow(window) {
                     result = { 'error' : exception.message };
                 }
             }
-            function skipCycles() {
-                var seen = new Object(null);
-                return function(key, val) {
-                    if (val instanceof Object) {
-                        if (seen[val] == true) {
-                            return '<cycle>';
-                        } else {
-                            seen[val] = true;
-                        }
-                    }
-                    console.log(typeof(val));
-                    return val;
-                }
-            }
             try {
-                result = JSON.stringify(result,skipCycles());
+                result = JSON.stringify(result);
             } catch (e) {
                 // Try again, but this time just the exception.
                 // (nativeJSON.encode has been known to throw
                 // exceptions - to trigger this, try giving the command
                 // "window" (that would return the window - which is
                 // huge!)
-                result = JSON.stringify({error:
-                    "Error encoding JSON string for result/error. " +
-                    "Was it too large?"
-                });
-                if (e instanceof Error) {
-                    console.log(e.name + ': '+e.message);
-                } else {
-                    console.log(e);
-                }
+                result = JSON.stringify({error: "Error encoding JSON string: " + e });
             }
             element.setAttribute('result', result);
             var event = document.createEvent('Event');
@@ -245,8 +209,10 @@ evalByEventPassing = function (window, commandStr, callback) {
     var callbackID = (callbackCounter++);
     callbacks[callbackID] = callback;
 
-    if (evalInSandbox(window, 'typeof setupEvalByEventPassing') ==
-        "undefined") {
+    /* XXX: This used to use a sandbox eval to obtain "typeof setupEvalByEventPassing".
+    For some reason, that would always fail and return undefined on FF >= 33.
+    So, the check is now simplified, but I am not sure what the security implication(s) are! */
+    if (typeof window.wrappedJSObject.setupEvalByEventPassing == "undefined") {
         initializeWindow(window);
     }
 
