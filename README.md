@@ -6,8 +6,8 @@ connection (such as telnet or netcat).
 Something like this:
 
     base@peter:~> telnet localhost 32000
-    window.location="http:/www.google.com/"
-    {"result":"http:/www.google.com/"}
+    window.location="http://www.google.com/"
+    {"result":"http://www.google.com/"}
 
 You send any Javascript commands to firefox in a single line, and it sends
 either a result or an error back JSON-encoded. As a convenience, a command of
