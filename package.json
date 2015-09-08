@@ -1,7 +1,7 @@
 {
   "title": "Remote Control",
   "name": "remote-control",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Remote control the browser via a socket.",
   "main": "index.js",
   "author": "Robert Xiao",
