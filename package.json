@@ -1,0 +1,13 @@
+{
+  "title": "Remote Control",
+  "name": "remote-control",
+  "version": "0.0.0",
+  "description": "Remote control the browser via a socket.",
+  "main": "index.js",
+  "author": "Robert Xiao",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "GPL v2"
+}
