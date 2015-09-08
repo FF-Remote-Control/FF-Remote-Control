@@ -1,4 +1,8 @@
 *.xpi binary export-ignore
+
 .gitignore export-ignore
 .gitattributes export-ignore
 Makefile export-ignore
+*.md export-ignore
+Changelog.txt export-ignore
+urls.txt export-ignore

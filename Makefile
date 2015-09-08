@@ -16,5 +16,4 @@ xpi-dir:
 		mv /tmp/$(FILENAME) .
 xpi-git:
 	@echo 'Creating $(FILENAME) from $$(git archive HEAD)'
-	$(ECHO) git archive --format=zip HEAD . > $(FILENAME)
-
+	$(ECHO) git archive --format=zip --worktree-attributes HEAD . > $(FILENAME)
