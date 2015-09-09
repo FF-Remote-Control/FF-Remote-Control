@@ -9,5 +9,24 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "GPL v2"
+  "license": "GPL v2",
+  "preferences": [{
+    "name": "localhostOnly",
+    "title": "Listen on localhost only",
+    "description": "If true, accept connections from localhost only. If false, accept connections from anywhere (may be insecure!).",
+    "type": "bool",
+    "value": true
+  },{
+    "name": "port",
+    "title": "TCP port number to listen on",
+    "description": "Which TCP port number the server should listen on.",
+    "type": "integer",
+    "value": 32000
+  },{
+    "name": "activeTab",
+    "title": "Send commands to active tab",
+    "description": "If true, commands are sent to whichever tab is active. If false, commands are only sent to the tab in which remote control was activated.",
+    "type": "bool",
+    "value": false
+  }]
 }
