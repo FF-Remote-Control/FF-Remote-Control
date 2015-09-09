@@ -90,7 +90,6 @@ var callbacks = {};
 var callbackCounter = 0;
 
 function handleResult(body, e) {
-    // Firebug.Console.log("handleResult");
     var result = e.target.getAttribute('result');
     var callbackID = e.target.getAttribute('callbackID');
     body.removeChild(e.target);
@@ -106,12 +105,9 @@ function handleResult(body, e) {
     if (!callbacks[callbackID]) return;
     callbacks[callbackID](result);
     delete(callbacks[callbackID]);
-
-    // Firebug.Console.log(["/handleResult", result]);
 }
 
 function initializeWindow(window) {
-    // Firebug.Console.log("initializeWindow");
     var document = window.document;
 
     // Insert the script element that sets up communication with the
@@ -121,10 +117,7 @@ function initializeWindow(window) {
     var scriptElement = document.createElement('script');
     scriptElement.setAttribute("type","text/javascript");
     function setupEvalByEventPassing() {
-        // console.log('setupEvalByEventPassing');
-
         function evalByEventPassingCommand(e) {
-            // console.log('evalByEventPassingCommand');
             var element = e.target;
             var command = element.getAttribute('command');
             element.removeAttribute('command');
@@ -156,8 +149,8 @@ function initializeWindow(window) {
             event.initEvent('evalByEventPassingResultMessage',
                             true, false);
             element.dispatchEvent(event);
-            // console.log('/evalByEventPassingCommand');
         };
+        /* This event listener is called whenever an eval request is received */
         document.addEventListener(
             'evalByEventPassingCommandMessage',
             evalByEventPassingCommand,
@@ -171,25 +164,23 @@ function initializeWindow(window) {
     // evaluated in the page's context
     document.getElementsByTagName("head")[0].appendChild(scriptElement);
 
-    document.addEventListener("evalByEventPassingResultMessage",
-                              function (event) {
-                                // Handle the result in chrome. It needs a
-                                // body so it can remove the element we
-                                // inserted earlier
-                                handleResult(
-                                    document.getElementsByTagName("body")[0],
-                                    event
-                                )
-                              },
-                              false,
-                              true);
-
-    // Firebug.Console.log("/initializeWindow");
+    /* This event listener is called whenever an eval request completes */
+    document.addEventListener(
+        'evalByEventPassingResultMessage',
+        function (event) {
+            // Handle the result in chrome. It needs a
+            // body so it can remove the element we
+            // inserted earlier
+            handleResult(
+                document.getElementsByTagName("body")[0],
+                event
+            )
+        },
+        false,
+        true);
 }
 
 evalByEventPassing = function (window, commandStr, callback) {
-    // Firebug.Console.log("evalByEventPassing");
-
     var document = window.document;
 
     // We must have a document, body and a head for this to work:
@@ -226,8 +217,6 @@ evalByEventPassing = function (window, commandStr, callback) {
     var event = document.createEvent("Event");
     event.initEvent("evalByEventPassingCommandMessage", true, false);
     element.dispatchEvent(event);
-
-    // Firebug.Console.log("/evalByEventPassing");
 };
 
 })();
