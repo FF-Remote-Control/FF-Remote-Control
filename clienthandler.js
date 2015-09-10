@@ -10,11 +10,13 @@ const ConverterOutputStream = CC("@mozilla.org/intl/converter-output-stream;1",
                                  "init");
 const threadManager = Cc["@mozilla.org/thread-manager;1"].getService();
 
-const { CommandRunner } = require("./cmdexec");
+const { TabControl } = require("./tabctrl");
 
 function RemoteControlClientHandler(transport, tabfn, status_callback) {
     this.tabfn = tabfn;
-    this.pending_commands = {}; // {id: runner}
+    this.curtab = tabfn();
+    this.tabctrl = null;
+    this.tab_destroy_callback = this.destroyTabCtrl.bind(this);
     this.pending_output = {}; // {id: response}
     this.reply_queue = []; // [id]
     this.next_id = 0;
@@ -87,10 +89,18 @@ RemoteControlClientHandler.prototype.flushPendingOutput = function() {
     }
 }
 
+RemoteControlClientHandler.prototype.destroyTabCtrl = function() {
+    if(this.tabctrl !== null) {
+        this.curtab.removeListener("pageshow", this.tab_destroy_callback);
+        this.curtab.removeListener("close", this.tab_destroy_callback);
+        this.tabctrl.shutdown();
+        this.tabctrl = null;
+    }
+}
+
 RemoteControlClientHandler.prototype.handleCommandReply = function(reqid, reply) {
     this.pending_output[reqid] = reply;
     this.flushPendingOutput();
-    delete this.pending_commands[reqid];
 }
 
 RemoteControlClientHandler.prototype.handleOneCommand = function(command) {
@@ -101,15 +111,33 @@ RemoteControlClientHandler.prototype.handleOneCommand = function(command) {
     var reqid = this.next_id++;
     this.reply_queue.push(reqid);
 
-    // TODO: adjust default timeout
-    this.pending_commands[reqid] = new CommandRunner(
-        this.tabfn(), command, this.handleCommandReply.bind(this, reqid), 10000);
+    if(command == "newtab") {
+        tabs.open('about:blank');
+        this.handleCommandReply(reqid, {result: 'OK'});
+        return;
+    }
+
+    if(command == "reload") {
+        command = "window.location.reload()";
+    }
+
+    var tab = this.tabfn();
+    if(tab.id !== this.curtab.id) {
+        this.destroyTabCtrl();
+    }
+    this.curtab = tab;
+
+    if(this.tabctrl === null) {
+        this.tabctrl = new TabControl(tab, this.tab_destroy_callback);
+        tab.on("pageshow", this.tab_destroy_callback);
+        tab.on("close", this.tab_destroy_callback);
+    }
+
+    this.tabctrl.submitRequest(reqid, command, this.handleCommandReply.bind(this, reqid), 10000);
 }
 
 RemoteControlClientHandler.prototype.shutdown = function() {
-    for(var reqid in this.pending_commands) {
-        this.pending_commands[reqid].abort("client shutdown");
-    }
+    this.destroyTabCtrl();
     this.stopIO(false);
 }
 
