@@ -79,6 +79,14 @@ Issues
 Please report any problems to the
 [Issue tracker](https://github.com/FF-Remote-Control/FF-Remote-Control/issues)
 
+Known issues:
+- On pages protected by a Content Security Policy (CSP), some JavaScript or
+DOM features are disabled. For example, you will not be able to define
+functions through remote control, and some DOM functions like
+`document.write` may fail. For workarounds to some of these issues, you can
+consult [the Mozilla documentation on interacting with page scripts](https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts/Interacting_with_page_scripts).
+These limitations do not apply to non-CSP pages.
+
 Credits
 =======
 This version of FF-Remote-Control is a complete rewrite from version 1.
