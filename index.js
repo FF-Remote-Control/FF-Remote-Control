@@ -49,6 +49,19 @@ function startActiveTabRemoteControl() {
     });
 }
 
+function tryEnableRemoteControl() {
+    try {
+        if(prefs['activeTab']) {
+            startActiveTabRemoteControl();
+        } else {
+            startSingleTabRemoteControl();
+        }
+    } catch(e) {
+        console.error('Failed to start remote control: ' + e);
+        disableRemoteControl();
+    }
+}
+
 function disableRemoteControl() {
     if(remoteControl !== null) {
         remoteControl.shutdown();
@@ -81,18 +94,12 @@ function onMainButtonChanged(state) {
     if(remoteControl != null)
         disableRemoteControl();
 
-    try {
-        if(prefs['activeTab']) {
-            startActiveTabRemoteControl();
-        } else {
-            startSingleTabRemoteControl();
-        }
-    } catch(e) {
-        console.error('Failed to start remote control: ' + e);
-        disableRemoteControl();
-    }
+    tryEnableRemoteControl();
 }
 
 exports.onUnload = function(reason) {
     disableRemoteControl();
 }
+
+if(prefs['autostart'])
+    tryEnableRemoteControl();

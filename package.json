@@ -28,5 +28,11 @@
     "description": "If true, commands are sent to whichever tab is active. If false, commands are only sent to the tab in which remote control was activated.",
     "type": "bool",
     "value": false
+  },{
+    "name": "autostart",
+    "title": "Start automatically with Firefox",
+    "description": "If true, remote control is activated as soon as Firefox starts.",
+    "type": "bool",
+    "value": false
   }]
 }
