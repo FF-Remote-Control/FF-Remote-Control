@@ -4,5 +4,4 @@
 .gitattributes export-ignore
 Makefile export-ignore
 *.md export-ignore
-Changelog.txt export-ignore
 urls.txt export-ignore
