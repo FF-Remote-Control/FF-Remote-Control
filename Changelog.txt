@@ -1,0 +1,27 @@
+Version 2.0.0 (Robert Xiao <nneonneo@gmail.com>)
+- Total rewrite to use the Firefox Add-on SDK
+- No longer requires browser restart
+- New icon and toolbar behaviour (it shows as pressed only on the tab that is accepting commands)
+- Autostart preference
+- Ability to operate on pages protected by Content Security Policy (albeit with some limitations)
+- Use standard Firefox addon preference page to avoid preference layout bugs
+
+Version 1.3 (Robert Xiao <nneonneo@gmail.com>)
+- Minor packaging changes (remove unnecessary files)
+- Fix a minor event handler leak
+Version 1.2 (Robert Xiao <nneonneo@gmail.com>)
+- Fixed initializeWindow to work on Firefox >= 32
+- Removed the broken cycle detector in favor of just catching
+  serialization exceptions
+- Reduced memory usage with large numbers of remote control calls
+Version 1.1 (Hari Mahadevan <hari@smallpearl.com>)
+- Updated chrome/content/overlay.js chaning log(msg) to 
+  console.log(msg), to make it work under Firefox 36.
+Version 1.0
+- Cleaned up all outstanding issues from bugtracker on github
+Version 0.2
+- Handles all javascript by using new evalByEventPassing()
+- Handles UTF-8 encoding properly for both input and output
+- Added a link to the home page and a proper description
+Version 0.1
+- Initial version. Uses Components.utils.evalInSandbox()
