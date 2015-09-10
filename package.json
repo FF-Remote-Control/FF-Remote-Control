@@ -1,15 +1,20 @@
 {
   "title": "Remote Control",
+  "id": "remote-control@morch.com",
   "name": "remote-control",
   "version": "2.0.0",
   "description": "Remote control the browser via a socket.",
   "main": "index.js",
   "author": "Robert Xiao",
+  "license": "GPL v2",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "GPL v2",
+  "permissions": {
+    "private-browsing": true,
+    "multiprocess": true
+  },
   "preferences": [{
     "name": "localhostOnly",
     "title": "Listen on localhost only",
