@@ -40,7 +40,7 @@ function startSingleTabRemoteControl() {
 }
 
 function startActiveTabRemoteControl() {
-    remoteControl = new RemoteControlServer(function() { return activeTab; }, prefs['localhostOnly'], prefs['port']);
+    remoteControl = new RemoteControlServer(function() { return tabs.activeTab; }, prefs['localhostOnly'], prefs['port']);
 
     /* show button as checked globally */
     mainButton.state(mainButton, {

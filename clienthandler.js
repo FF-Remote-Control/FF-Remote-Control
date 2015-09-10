@@ -1,5 +1,7 @@
 "use strict";
 
+const tabs = require("sdk/tabs");
+
 const { CC, Cc, Ci } = require("chrome");
 
 const ConverterInputStream = CC("@mozilla.org/intl/converter-input-stream;1",
