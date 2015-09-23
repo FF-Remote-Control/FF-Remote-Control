@@ -135,11 +135,20 @@ remotecontrol = {
                     var tabNumber = -1;
                     if (typeof selector === 'number'){
                         tabNumber = selector;
-                    } else {
+                    } else if (typeof selector === 'string') {
                         selector = ''+selector;
                         for (var i=0;i<gBrowser.tabs.length;++i){
                             var tab = gBrowser.tabs[i];
                             if (tab.label.indexOf(selector)!==-1){
+                                tabNumber = i;
+                                break;
+                            }
+                        }
+                    } else if (typeof selector === 'object') {
+                        var uri = ''+selector.uri;
+                        for (var i=0;i<gBrowser.tabs.length;++i){
+                            var tabBrowser = gBrowser.getBrowserForTab(gBrowser.tabs[i]);
+                            if (tabBrowser.currentURI.resolve("").indexOf(uri)!==-1){
                                 tabNumber = i;
                                 break;
                             }
