@@ -377,7 +377,7 @@ remotecontrol = {
 window.addEventListener(
     "load",
     function remoteControlOnload() {
-        window.removeEventListener(remoteControlOnload);
+        window.removeEventListener('load', remoteControlOnload);
         remotecontrol.onLoad();
     },
     false,
