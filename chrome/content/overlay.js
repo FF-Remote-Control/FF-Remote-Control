@@ -126,6 +126,37 @@ remotecontrol = {
                             'navigator:browser'
                         ).getBrowser().contentWindow;
                 }
+
+                if (command.startsWith("{")){
+                    var query = JSON.parse(command);
+                    var selector = query.selector;
+                    var tabNumber = -1;
+                    if (typeof selector === 'number'){
+                        tabNumber = selector;
+                    } else if (typeof selector === 'string') {
+                        selector = ''+selector;
+                        for (var i=0;i<gBrowser.tabs.length;++i){
+                            var tab = gBrowser.tabs[i];
+                            if (tab.label.indexOf(selector)!==-1){
+                                tabNumber = i;
+                                break;
+                            }
+                        }
+                    } else if (typeof selector === 'object') {
+                        var uri = ''+selector.uri;
+                        for (var i=0;i<gBrowser.tabs.length;++i){
+                            var tabBrowser = gBrowser.getBrowserForTab(gBrowser.tabs[i]);
+                            if (tabBrowser.currentURI.resolve("").indexOf(uri)!==-1){
+                                tabNumber = i;
+                                break;
+                            }
+                        }
+                    }
+                    if (tabNumber===-1) return;
+                    remotecontrol.controlledWindow = gBrowser.getBrowserForTab(gBrowser.tabs[tabNumber]).contentWindow;
+                    command = query.command;
+                }
+
                 // Get rid of any newlines
                 command = command.replace(/\n*$/, '').replace(/\r*$/, '');
 
