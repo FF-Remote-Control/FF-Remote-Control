@@ -17,18 +17,6 @@ function object(o) {
     return new F();
 }
 
-function deArray(log) {
-    return function(msg) {
-        if (typeof(msg) != "string") {
-            for(var i = 0; i < msg.length; ++i) {
-                console.log(msg[i]);
-            }
-        } else {
-            console.log(msg);
-        }
-    }
-}
-
 remotecontrol = {
     controlledWindow: null,
     serverSocket: null,
@@ -55,15 +43,25 @@ remotecontrol = {
     },
 
     log: function (msg) {
-        if (typeof(Firebug) == "object" &&
-            typeof(Firebug.Console) == "object") {
-            this.log = Firebug.Console.log;
-        } else if (typeof(console) == "object") {
-            this.log = deArray(console.log);
-        } else {
-                throw "There's no way to log anything :( " + msg;
+  
+      if (typeof(Firebug) == "object" && typeof(Firebug.Console) == "object") {
+        Firebug.Console.log(msg);
+        return;
+      }
+  
+      if (typeof(console) == "object") {
+        if (typeof(msg) == "string") {
+          msg = [msg];
         }
-        return this.log(msg);
+
+        for (var i = 0; i < msg.length; ++i) {
+          console.log(msg[i]);
+        }
+        
+        return;
+      }
+  
+      throw "There's no way to log anything :( " + msg;
     },
 
     startControlSocket: function() {
