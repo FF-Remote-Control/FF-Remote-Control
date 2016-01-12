@@ -289,13 +289,16 @@ remotecontrol = {
     },
 
     maybeStartAutomatically: function () {
-        var start = Components.classes[
-                "@morch.com/remotecontrol/command-line-handler;1"
-            ]
+        var hasCommandLineStartFlag = Components.classes["@morch.com/remotecontrol/command-line-handler;1"]
             .getService()
             .wrappedJSObject
             .startRemoteControlOnce();
-        if (start) {
+
+        var startEnvironmentVariable = Components.classes["@mozilla.org/process/environment;1"]
+            .getService(Components.interfaces.nsIEnvironment)
+            .get('FIREFOX_START_REMOTE_CONTROL');
+
+        if (hasCommandLineStartFlag || startEnvironmentVariable == 1) {
             this.startControlSocket();
 
             // Adjust button.checked state
