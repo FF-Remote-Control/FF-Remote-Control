@@ -119,35 +119,24 @@ remotecontrol = {
                 if (command == "") {
                     return;
                 }
+  
+                var wm = Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator);
+                var browser = wm.getMostRecentWindow('navigator:browser').getBrowser();
+
                 if (prefs.activeTab) {
-                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
-                        .getService(Components.interfaces.nsIWindowMediator);
-                    remotecontrol.controlledWindow = wm.getMostRecentWindow(
-                            'navigator:browser'
-                        ).getBrowser().contentWindow;
+                    // if you want to use custom commands please disable this option
+                    remotecontrol.controlledWindow = browser.contentWindow;
                 }
-                // Get rid of any newlines
-                command = command.replace(/\n*$/, '').replace(/\r*$/, '');
 
-                remotecontrol.log(["Remote Control command", command]);
-
+                // for BC
                 if (command == "reload") {
-                    command = "window.location.reload()";
-                } else if(command == "newtab") {
-                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
-                        .getService(Components.interfaces.nsIWindowMediator);
-                    var mainWindow = wm.getMostRecentWindow("navigator:browser");
-                    mainWindow.getBrowser().selectedTab = mainWindow.getBrowser().addTab("about:blank");
-
-
-                    var outStr = JSON.stringify({result: "OK"}) + "\n";
-                    this.utf8Output.writeString(outStr);
-                    return;
+                    command = "//:reload";
+                } else if (command == "newtab") {
+                    command = "//:new_tab";
                 }
 
                 var reader = this;
-                var callback = function (result) {
-                    // remotecontrol.log("callback");
+                var response = function (result) {
                     var outStr;
                     try {
                         outStr = JSON.stringify(result) + "\n";
@@ -159,18 +148,75 @@ remotecontrol = {
                         // "window" (that would return the window - which is
                         // huge!)
                         outStr = JSON.stringify({error:
-                            "Error encoding JSON string for result/error. " +
-                            "Was it too large?"
-                        }) + "\n";
-                        remotecontrol.log(["Remote Control result error",
-                                           result]);
+                          "Error encoding JSON string for result/error. " +
+                          "Was it too large?"
+                          }) + "\n";
+                        remotecontrol.log(["Remote Control result error", result]);
                     }
                     reader.utf8Output.writeString(outStr);
                 };
 
-                evalByEventPassing( remotecontrol.controlledWindow,
-                                    command,
-                                    callback );
+                var executeJsScript = function (js) {
+                  // Get rid of any newlines
+                  js = js.replace(/\n*$/, '').replace(/\r*$/, '');
+                  remotecontrol.log(["Remote Control command", js]);
+                  evalByEventPassing(remotecontrol.controlledWindow, js, response);
+                }
+
+                // find custom command 
+                var re = /^\/\/:([a-z_]+)(\s((?!\*\/).)+|)$/g;
+
+                var match;
+                if ((match = re.exec(command)) !== null) {
+
+                    var customCommand = match[1];
+                    var customCommandArgument = match[2].substr(1);
+
+                    if (customCommand == 'reload') {
+                        executeJsScript("window.location.reload()");
+                        return;
+                    }
+
+                    if (customCommand == 'new_tab') {
+                        browser.selectedTab = browser.addTab("about:blank");
+                        return response({result: "OK"});
+                    }
+
+                    if (customCommand == 'use_active_tab') {
+                        remotecontrol.controlledWindow = browser.contentWindow;
+                        return response({result: "OK"});
+                    }
+
+
+                    if (customCommand == 'use_tab') {
+                        var tabMatch = customCommandArgument.match(new RegExp('^/(.*?)/([gimy]*)$'));
+                        var regex = new RegExp(tabMatch[1], tabMatch[2]);
+
+                        for (var i = 0; i < browser.tabs.length; ++i) {
+                            var tab = browser.tabs[i];
+                            var tabInfo = tab.label + ' '+ browser.getBrowserAtIndex(i).contentWindow.location.href;
+                            if (tabInfo.match(regex) != null) {
+                                remotecontrol.controlledWindow = browser.getBrowserForTab(tab).contentWindow;
+                                return response({result: "OK"});
+                            }
+                        }
+
+                        return response({result: "ERROR", message: 'Cant find tab by regex:' + customCommandArgument});
+                    }
+
+                    if (customCommand == 'get_tab_list') {
+                        var tabs = [];
+                        for (var i = 0; i < browser.tabs.length; ++i) {
+                            var tab = browser.tabs[i];
+                            tabs.push({label: tab.label, url: browser.getBrowserAtIndex(i).contentWindow.location.href});
+                        }
+                        return response({result: "OK", tabs:tabs});
+                    }
+
+                    return response({result: "ERROR", message: 'Invalid custom command:' + customCommand});
+                }
+                
+                executeJsScript(command);
             }
         }
         var listener = {
