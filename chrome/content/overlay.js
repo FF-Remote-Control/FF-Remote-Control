@@ -119,35 +119,24 @@ remotecontrol = {
                 if (command == "") {
                     return;
                 }
+  
+                var wm = Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator);
+                var browser = wm.getMostRecentWindow('navigator:browser').getBrowser();
+
                 if (prefs.activeTab) {
-                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
-                        .getService(Components.interfaces.nsIWindowMediator);
-                    remotecontrol.controlledWindow = wm.getMostRecentWindow(
-                            'navigator:browser'
-                        ).getBrowser().contentWindow;
+                    // if you want to use custom commands please disable this option
+                    remotecontrol.controlledWindow = browser.contentWindow;
                 }
-                // Get rid of any newlines
-                command = command.replace(/\n*$/, '').replace(/\r*$/, '');
 
-                remotecontrol.log(["Remote Control command", command]);
-
+                // for BC
                 if (command == "reload") {
-                    command = "window.location.reload()";
-                } else if(command == "newtab") {
-                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
-                        .getService(Components.interfaces.nsIWindowMediator);
-                    var mainWindow = wm.getMostRecentWindow("navigator:browser");
-                    mainWindow.getBrowser().selectedTab = mainWindow.getBrowser().addTab("about:blank");
-
-
-                    var outStr = JSON.stringify({result: "OK"}) + "\n";
-                    this.utf8Output.writeString(outStr);
-                    return;
+                    command = "//:reload";
+                } else if (command == "newtab") {
+                    command = "//:new_tab";
                 }
 
                 var reader = this;
-                var callback = function (result) {
-                    // remotecontrol.log("callback");
+                var sendResponse = function (result) {
                     var outStr;
                     try {
                         outStr = JSON.stringify(result) + "\n";
@@ -159,18 +148,83 @@ remotecontrol = {
                         // "window" (that would return the window - which is
                         // huge!)
                         outStr = JSON.stringify({error:
-                            "Error encoding JSON string for result/error. " +
-                            "Was it too large?"
-                        }) + "\n";
-                        remotecontrol.log(["Remote Control result error",
-                                           result]);
+                          "Error encoding JSON string for result/error. " +
+                          "Was it too large?"
+                          }) + "\n";
+                        remotecontrol.log(["Remote Control result error", result]);
                     }
                     reader.utf8Output.writeString(outStr);
                 };
 
-                evalByEventPassing( remotecontrol.controlledWindow,
-                                    command,
-                                    callback );
+                var executeJsScript = function (js) {
+                  // Get rid of any newlines
+                  js = js.replace(/\n*$/, '').replace(/\r*$/, '');
+                  remotecontrol.log(["Remote Control command", js]);
+                  evalByEventPassing(remotecontrol.controlledWindow, js, sendResponse);
+                }
+
+                // find meta command
+                // format is: //:command_name argument
+                // for example echo "//::get_tab_list" | nc -q 1 localhost 32000
+                var metaCommandRegexp = /^\/\/:([a-z_]+)(\s((?!\*\/).)+|)$/g;
+
+                var metaCommandMatch;
+                if ((metaCommandMatch = metaCommandRegexp.exec(command)) !== null) {
+
+                    var metaCommand = metaCommandMatch[1];
+                    var metaCommandArgument = metaCommandMatch[2].substr(1);
+
+                    if (metaCommand == 'reload') {
+                        executeJsScript("window.location.reload()");
+                        return;
+                    }
+
+                    if (metaCommand == 'new_tab') {
+                        browser.selectedTab = browser.addTab("about:blank");
+                        sendResponse({result: "OK"});
+                        return;
+                    }
+
+                    if (metaCommand == 'use_active_tab') {
+                        remotecontrol.controlledWindow = browser.contentWindow;
+                        sendResponse({result: "OK"});
+                        return;
+                    }
+
+
+                    if (metaCommand == 'use_tab') {
+                        var tabMatch = metaCommandArgument.match(new RegExp('^/(.*?)/([gimy]*)$'));
+                        var regex = new RegExp(tabMatch[1], tabMatch[2]);
+
+                        for (var i = 0; i < browser.tabs.length; ++i) {
+                            var tab = browser.tabs[i];
+                            var tabInfo = tab.label + ' ' + browser.getBrowserAtIndex(i).contentWindow.location.href;
+                            if (tabInfo.match(regex) != null) {
+                                remotecontrol.controlledWindow = browser.getBrowserForTab(tab).contentWindow;
+                                sendResponse({result: "OK"});
+                                return;
+                            }
+                        }
+
+                        sendResponse({result: "ERROR", message: 'Can`t find tab by regex: ' + metaCommandArgument});
+                        return;
+                    }
+
+                    if (metaCommand == 'get_tab_list') {
+                        var tabs = [];
+                        for (var i = 0; i < browser.tabs.length; ++i) {
+                            var tab = browser.tabs[i];
+                            tabs.push({label: tab.label, url: browser.getBrowserAtIndex(i).contentWindow.location.href});
+                        }
+                        sendResponse({result: "OK", tabs:tabs});
+                        return;
+                    }
+
+                    sendResponse({result: "ERROR", message: 'Invalid custom command:' + metaCommand});
+                    return;
+                }
+                
+                executeJsScript(command);
             }
         }
         var listener = {
@@ -289,13 +343,12 @@ remotecontrol = {
     },
 
     maybeStartAutomatically: function () {
-        var start = Components.classes[
-                "@morch.com/remotecontrol/command-line-handler;1"
-            ]
+        var hasCommandLineStartFlag = Components.classes["@morch.com/remotecontrol/command-line-handler;1"]
             .getService()
             .wrappedJSObject
             .startRemoteControlOnce();
-        if (start) {
+
+        if (hasCommandLineStartFlag) {
             this.startControlSocket();
 
             // Adjust button.checked state
