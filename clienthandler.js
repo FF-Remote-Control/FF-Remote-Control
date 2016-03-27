@@ -14,6 +14,69 @@ const threadManager = Cc["@mozilla.org/thread-manager;1"].getService();
 
 const { TabControl } = require("./tabctrl");
 
+const cookieManager2 = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager2);
+
+const cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager);
+
+
+function GetCookies()
+{
+    var count,
+        cookie,
+        cookies;
+
+    count = cookieManager2.enumerator;
+    cookies = [];
+
+    while (count.hasMoreElements())
+    {
+        cookie = count.getNext().QueryInterface(Ci.nsICookie2);
+        // dump only cookie standard properties
+        cookies.push( {
+            host:       cookie.host,
+            path:       cookie.path,
+            name:       cookie.name,
+            value:      cookie.value,
+            isSecure:   cookie.isSecure,
+            isHttpOnly: cookie.isHttpOnly,
+            isSession:  cookie.isSession,
+            expiry:     cookie.expiry
+        } );
+        // alternatively it is possible to dump the whole FF cookie object:
+        // cookies.push(cookie);
+    }
+
+    return cookies;
+}
+
+
+function SetCookies( cookiesCmd )
+{
+    var cookies,
+        len,
+        n,
+        i,
+        c;
+
+    len = 10; // "setcookies".length;
+
+    cookies = JSON.parse( cookiesCmd.substr( len ).trim() );
+
+    n = cookies.length;
+    for( i = 0; i < n; i++ )
+    {
+        c = cookies[ i ];
+        cookieManager2.add( c.host, c.path, c.name, c.value, c.isSecure, c.isHttpOnly, c.isSession, c.expiry );
+    }
+}
+
+
+function ClearCookies()
+{
+    cookieManager.removeAll();
+}
+
+
 function RemoteControlClientHandler(transport, tabfn, status_callback) {
     this.tabfn = tabfn;
     this.curtab = tabfn();
@@ -122,6 +185,25 @@ RemoteControlClientHandler.prototype.handleOneCommand = function(command) {
     if(command == "reload") {
         command = "window.location.reload()";
     }
+
+    if(command == "getcookies") {
+        var cook = GetCookies();
+        this.handleCommandReply(reqid, {result: cook});
+        return;
+    }
+
+    if(command.substr( 0, 10 ) == "setcookies") {
+        SetCookies( command );
+        this.handleCommandReply(reqid, {result: 'OK'});
+        return;
+    }
+
+    if(command == "clearcookies") {
+        ClearCookies();
+        this.handleCommandReply(reqid, {result: 'OK'});
+        return;
+    }
+
 
     var tab = this.tabfn();
     if(tab.id !== this.curtab.id) {
