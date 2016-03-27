@@ -74,6 +74,52 @@ support.
 If you don't see `+python`, you can rebuild VIM from sources with +python support.
 Iinstructions for this can be found [here](https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source).
 
+Cookies management
+==================
+
+Three commands are available to manage cookies/sessions:
+
+`clearcookies` clears all the cookies (for any domain) stored for the active profile
+
+`getcookies` will return into `result` an array of objects. The objects represents all the cookies with their own properties.
+
+`setcookies` followed by an array of cookie-objects sets/overwrites the cookies passed (all cookie properties **must** be defined for each cookie passed)
+
+**Cookie properties:**
+
+A cookie is defined by the following properties:
+
+|Property|Type|
+|-|-|
+|host|string|
+|path|string|
+|name|string|
+|value|string|
+|isSecure|boolean|
+|isHttpOnly|boolean|
+|isSession|boolean|
+|expiry|integer|
+
+**Example:**
+
+    $ telnet localhost 32000
+    Trying 127.0.0.1...
+    Connected to localhost.
+    Escape character is '^]'.
+    clearcookies
+    {"result":"OK"}
+    window.location.href="https://www.mozilla.org"
+    {"result":"https://www.mozilla.org"}
+    getcookies
+    {"result":[{"host":".mozilla.org","path":"/","name":"optimizelyEndUserId","value":"oeu1459095848224r0.5301917878826897","isSecure":false,"isHttpOnly":false,"isSession":false,"expiry":1774455848},
+               {"host":".mozilla.org","path":"/","name":"optimizelyBuckets","value":"%7B%7D","isSecure":false,"isHttpOnly":false,"isSession":false,"expiry":1774455848},
+               .
+               .
+               .
+    ] }
+    setcookies [{"host":".mozilla.org","path":"/","name":"optimizelyEndUserId","value":"oeu1459095848224r0.5301917878826897","isSecure":false,"isHttpOnly":false,"isSession":false,"expiry":1774455848}]
+    {"result":"OK"}
+
 Issues
 ======
 Please report any problems to the

@@ -2,7 +2,7 @@
   "title": "Remote Control",
   "id": "remote-control@morch.com",
   "name": "remote-control",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Remote control the browser via a socket.",
   "main": "index.js",
   "author": "Robert Xiao",

@@ -1,3 +1,6 @@
+Version 2.1.0 (paolobertani)
+- Implemented getcookies, setcookies, clearcookies commands
+
 Version 2.0.0 (Robert Xiao <nneonneo@gmail.com>)
 - Total rewrite to use the Firefox Add-on SDK
 - No longer requires browser restart
@@ -15,7 +18,7 @@ Version 1.2 (Robert Xiao <nneonneo@gmail.com>)
   serialization exceptions
 - Reduced memory usage with large numbers of remote control calls
 Version 1.1 (Hari Mahadevan <hari@smallpearl.com>)
-- Updated chrome/content/overlay.js chaning log(msg) to 
+- Updated chrome/content/overlay.js chaning log(msg) to
   console.log(msg), to make it work under Firefox 36.
 Version 1.0
 - Cleaned up all outstanding issues from bugtracker on github
